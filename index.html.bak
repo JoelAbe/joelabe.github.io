@@ -139,11 +139,11 @@
                 <strong> remote </strong>
                 projects for studios, contributed to many game jam titles and helped prototype 
 				various styles of games including 
-				<strong>indie and mobile games</strong> using Unity and Unreal Engine.
+				<strong>demos, indie and mobile games</strong> using Unity and Unreal Engine.
               </p>
               <p class="about__content-details-para">
                 I’m passionate about creating gameplay systems that feel intuitive and immersive—from boss combat and AI to mission logic and world interaction. 
-				I love learning new tools, collaborating across disciplines, and building games that stick with people. 
+				I love learning new tools, collaborating across disciplines, and building games that stick with people. I’ve also worked on plugin development and editor tooling.
 				You can <strong><a href="#contact">reach out</a></strong> if you're looking to collaborate or just chat game dev!
               </p>
             </div>
@@ -203,7 +203,7 @@
                 href="./project-1.html"
                 class="btn btn--med btn--theme dynamicBgClr"
                 target="_blank"
-                >Case Study</a
+                >More</a
               >
             </div>
           </div>
@@ -223,11 +223,11 @@
 				As the <strong>lead gameplay programmer</strong>, I implemented core mechanics including responsive platforming, player movement, and dynamic environment interactions. 
 				I collaborated with a global team of new developers, helping guide design decisions and fostering teamwork throughout the jam.
               </p>
-              <a
-                href="./project-2.html"
-                class="btn btn--med btn--theme dynamicBgClr"
+               <a
+                href="https://joelabe.itch.io/false-awakening"
+                class="btn btn--med btn--theme project-details__links-btn"
                 target="_blank"
-                >Case Study</a
+                >Play on Itch.io</a
               >
             </div>
           </div>
@@ -247,11 +247,11 @@
 				I contributed as a <strong>gameplay programmer</strong>, designing and implementing systems for puzzle logic, world traversal, and inventory management. 
 				I also assisted with debugging and performance optimization to ensure smooth gameplay across all segments.
               </p>
-              <a
-                href="./project-3.html"
-                class="btn btn--med btn--theme dynamicBgClr"
+               <a
+                href="https://veeyuh.itch.io/glyphweaver"
+                class="btn btn--med btn--theme project-details__links-btn"
                 target="_blank"
-                >Case Study</a
+                >Play on Itch.io</a
               >
             </div>
           </div>
@@ -271,11 +271,11 @@
 				I designed and implemented all core gameplay systems, including AI NPC behavior, player locomotion, obstacle generation, and scoring mechanics. 
 				The project was managed end-to-end—from concept and prototyping to final execution and polish.
               </p>
-              <a
-                href="./project-3.html"
-                class="btn btn--med btn--theme dynamicBgClr"
+               <a
+                href="https://veeyuh.itch.io/clocktergeist"
+                class="btn btn--med btn--theme project-details__links-btn"
                 target="_blank"
-                >Case Study</a
+                >Play on Itch.io</a
               >
             </div>
           </div>
@@ -332,7 +332,7 @@
           <div class="main-footer__row main-footer__row-2">
             <h4 class="heading heading-sm text-lt">Joel Abraham Orethu</h4>
             <p class="main-footer__short-desc">
-              "mailto:joelorethu@gmail.com">joelorethu@gmail.com
+              <a href="mailto:joelorethu@gmail.com">joelorethu@gmail.com</a>
             </p>
           </div>
         </div>

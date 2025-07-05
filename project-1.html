@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Case Study of Project 1</title>
-    <meta name="description" content="Case study page of Project" />
+    <meta name="description" content="Case study page of Clocktergeist" />
 
     <link rel="stylesheet" href="css/style.css" />
 
@@ -19,16 +19,6 @@
   <body>
     <header class="header">
       <div class="header__content">
-        <div class="header__logo-container">
-          <div class="header__logo-img-cont">
-            <img
-              src="./assets/png/john-doe.png"
-              alt="Ram Maheshwari Logo Image"
-              class="header__logo-img"
-            />
-          </div>
-          <span class="header__logo-sub">John Doe</span>
-        </div>
         <div class="header__main">
           <ul class="header__links">
             <li class="header__link-wrapper">
@@ -84,16 +74,15 @@
     </header>
     <section class="project-cs-hero">
       <div class="project-cs-hero__content">
-        <h1 class="heading-primary">Project 1</h1>
+        <h1 class="heading-primary">Clocktergeist</h1>
         <div class="project-cs-hero__info">
           <p class="text-primary">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos
-            in numquam incidunt earum quaerat cum fuga, atque similique natus
-            nobis sit.
+				Built in <strong>Unreal Engine 5</strong> during a month-long Boss Rush Game Jam, Clocktergeist is a fast-paced action game set in a haunted clocktower. 
+				As the <strong>lead programmer</strong>, I partook in developing all the boss fights and contributed to combat mechanics, player control, and overall game feel.
           </p>
         </div>
         <div class="project-cs-hero__cta">
-          <a href="#" class="btn btn--bg" target="_blank">Live Link</a>
+          <a href="https://veeyuh.itch.io/clocktergeist" class="btn btn--bg" target="_blank">Play on Itch.io</a>
         </div>
       </div>
     </section>
@@ -102,8 +91,8 @@
         <div class="project-details__content">
           <div class="project-details__showcase-img-cont">
             <img
-              src="./assets/jpeg/project-mockup-example.jpeg"
-              alt="Project Image"
+              src="./assets/png/project-clock-image.png"
+              alt="Blueprint for the last boss"
               class="project-details__showcase-img"
             />
           </div>
@@ -111,52 +100,31 @@
             <div class="project-details__desc">
               <h3 class="project-details__content-title">Project Overview</h3>
               <p class="project-details__desc-para">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque
-                alias tenetur minus quaerat aliquid, aut provident blanditiis,
-                deleniti aspernatur ipsam eaque veniam voluptatem corporis vitae
-                mollitia laborum corrupti ullam rem. Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Neque alias tenetur minus quaerat
-                aliquid, aut provident blanditiis, deleniti aspernatur ipsam
-                eaque veniam voluptatem corporis vitae mollitia laborum corrupti
-                ullam rem?
+                This project marked my first attempt at designing boss AI systems. I initially planned to prototype the AI using Blueprints and later convert it to C++. However, due to the tight one month jam deadline and the absence of a more experienced Unreal Engine programmer I was collaborating with, I ended up completing the entire AI logic in Blueprints.
               </p>
+			  <h3 class="project-details__content-title">Challenges and Takeaways</h3>
               <p class="project-details__desc-para">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque
-                alias tenetur minus quaerat aliquid, aut provident blanditiis,
-                deleniti aspernatur ipsam eaque veniam voluptatem corporis vitae
-                mollitia laborum corrupti ullam rem?
+                 From the beginning of development, I started building the boss AI logic using Blueprints, following a structure similar to a state machine—manually handling transitions and behavior using Gates, Branches, and Sequences. At the time, I wasn’t aware that Unreal Engine had built-in systems like State Trees and Behavior Trees specifically designed for this purpose. I only discovered their existence near the end of the jam, which was too late to integrate them properly. In hindsight, using those tools would have made the logic much cleaner, modular, and easier to scale. You can view an example of my custom Blueprint logic <a href="https://blueprintue.com/blueprint/5gnb_szi/" target="_blank">here</a>.
               </p>
             </div>
             <div class="project-details__tools-used">
               <h3 class="project-details__content-title">Tools Used</h3>
               <div class="skills">
-                <div class="skills__skill">HTML</div>
-                <div class="skills__skill">CSS</div>
-                <div class="skills__skill">JavaScript</div>
-                <div class="skills__skill">React</div>
-                <div class="skills__skill">SASS</div>
-                <div class="skills__skill">GIT</div>
-                <div class="skills__skill">Shopify</div>
-                <div class="skills__skill">Wordpress</div>
-                <div class="skills__skill">Google ADS</div>
-                <div class="skills__skill">Facebook Ads</div>
-                <div class="skills__skill">Android</div>
-                <div class="skills__skill">IOS</div>
-              </div>
-            </div>
+           <div class="skills__skill">Unreal Engine 5</div>
+                <div class="skills__skill">C++/Blueprints</div>
+                <div class="skills__skill">SVN</div>
+                <div class="skills__skill">Gameplay Programming</div>
+                <div class="skills__skill">Animation Blueprinting</div>
+                <div class="skills__skill">UI Programming</div>
+                <div class="skills__skill">Performance Optimization</div>
+				</div>
             <div class="project-details__links">
               <h3 class="project-details__content-title">See Live</h3>
               <a
-                href="#"
+                href="https://veeyuh.itch.io/clocktergeist"
                 class="btn btn--med btn--theme project-details__links-btn"
                 target="_blank"
-                >Live Link</a
-              >
-              <a
-                href="#"
-                class="btn btn--med btn--theme-inv project-details__links-btn"
-                target="_blank"
-                >Code Link</a
+                >Play on Itch.io</a
               >
             </div>
           </div>
