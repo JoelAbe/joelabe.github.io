@@ -728,3 +728,29 @@ textarea {
   font-family: 'Courier New', Courier, monospace;
   color: #333;
 }
+
+.project-details__media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.project-details__video {
+  width: 100%;
+  max-width: 800px; /* Adjust width as needed */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+.project-details__desc-para a {
+  color: #0062b9;
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.project-details__desc-para a:hover {
+  color: #004a8d;
+}

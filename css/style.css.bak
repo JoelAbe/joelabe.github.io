@@ -704,7 +704,7 @@ textarea {
     top: 27px; } }
 	
 	.project-details__desc-list {
-  font-size: 1.7rem; /* Adjust as needed, e.g., 1.1rem or 16px */
+  font-size: 1.5rem; /* Adjust as needed, e.g., 1.1rem or 16px */
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
@@ -727,4 +727,19 @@ textarea {
   overflow-x: auto;
   font-family: 'Courier New', Courier, monospace;
   color: #333;
+}
+
+.project-details__media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.project-details__video {
+  width: 100%;
+  max-width: 800px; /* Adjust width as needed */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
 }
