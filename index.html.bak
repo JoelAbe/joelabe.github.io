@@ -212,6 +212,27 @@
           <div class="projects__row">
             <div class="projects__row-img-cont">
               <img
+                src="./assets/png/reactional-image.png"
+                alt="Reactional Screenshot"
+                class="projects__row-img"
+                loading="lazy"
+              />
+            </div>
+            <div class="projects__row-content">
+              <h3 class="projects__row-content-title">Reactional Music</h3>
+              <p class="projects__row-content-desc">
+                Over a year-long collaboration with <strong>Reactional Music</strong>, I developed a variety of <strong>Unity and Unreal Engine 5</strong> gameplay demos and tools. This included interactive music prototypes, editor plugins, and example scripts to showcase their tech across genres like platformers, puzzle games, and 3D adventures.
+              </p>
+               <a
+                href="https://reactionalmusic.com/"
+                class="btn btn--med btn--theme project-details__links-btn"
+                target="_blank"
+                >Visit their Website</a
+              >
+            </div>
+          </div><div class="projects__row">
+            <div class="projects__row-img-cont">
+              <img
                 src="./assets/png/false-image.png"
                 alt="False Awakening Screenshot"
                 class="projects__row-img"
