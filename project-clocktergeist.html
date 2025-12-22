@@ -93,90 +93,86 @@
 						</div>
 					</div>
 				</div>
-				<p class="project-details__desc-para">
+			</div>
+			<p class="project-details__desc-para">
 							  This project marked my first large-scale implementation of boss AI systems in Unreal Engine.
 							  Due to the one-month jam timeline and team constraints, I opted to implement the full AI logic
 							  using Blueprints, prioritizing iteration speed, debuggability, and rapid playtesting.
 							</p>
-				<ul class="project-details__highlights">
-					<li>Owned boss AI design and implementation for all encounters</li>
-					<li>Built custom state-driven behavior systems in Unreal Blueprints</li>
-					<li>Designed math-driven projectile patterns using parametric equations</li>
-					<li>Collaborated with artists and designers to tune combat feel</li>
-				</ul>
-				<h3 class="project-details__content-title">Challenges and Takeaways</h3>
-				<p class="project-details__desc-para">
-							  I structured boss behavior using a manually implemented state-machine approach built with
+			<ul class="project-details__highlights">
+				<li>Owned boss AI design and implementation for all encounters</li>
+				<li>Built custom state-driven behavior systems in Unreal Blueprints</li>
+				<li>Designed math-driven projectile patterns using parametric equations</li>
+				<li>Collaborated with artists and designers to tune combat feel</li>
+			</ul>
+			<h3 class="project-details__content-title">Challenges and Takeaways</h3>
+			<p class="project-details__desc-para">
+							  I structured the boss behaviors using a manually implemented state-machine approach built with
 							  Gates, Branches, and Sequences in Blueprints. While effective, I later identified that Unreal has
 							  native State Trees and Behavior Trees that would have provided a more modular and scalable solution.
 							</p>
-				<p class="project-details__desc-para">
+			<p class="project-details__desc-para">
 							  This experience gave me a strong appreciation for selecting the right abstraction level early
 							  in development and reinforced the importance of understanding engine-provided systems when
 							  building complex AI logic under production constraints.
 							</p>
-				<p class="project-details__desc-para">
-                 From the beginning of development, I started building the boss AI logic using Blueprints, following a structure similar to a state machine—manually handling transitions and behavior using Gates, Branches, and Sequences. 
-				 At the time, I wasn’t aware that Unreal Engine had built-in systems like State Trees and Behavior Trees specifically designed for this purpose. I only discovered their existence near the end of the jam, which was too late to integrate them properly. 
-				 In hindsight, using those tools would have made the logic much cleaner, modular, and easier to scale. You can view an example of my custom Blueprint logic <a href="https://blueprintue.com/blueprint/5gnb_szi/" target="_blank">here</a>.
-              </p>
-			</div>
-			<div class="project-details__showcase-img-cont">
-				<img src="./assets/png/project-clock-image.png" alt="Blueprint for the last boss" class="project-details__showcase-img"/>
-			</div>
-			<h3 class="project-details__content-title">My Role and a Feature Highlight</h3>
-			<p class="project-details__desc-para">
+		</div>
+		<div class="project-details__showcase-img-cont">
+			<img src="./assets/png/project-clock-image.png" alt="Blueprint for the last boss" class="project-details__showcase-img"/>
+		</div>
+		<h3 class="project-details__content-title">My Role and a Feature Highlight</h3>
+		<p class="project-details__desc-para">
   As the lead gameplay programmer, I designed and implemented behavior systems for all three bosses in Clocktergeist. Each boss introduced unique mechanics, patterns, and environmental challenges to push the player's movement, positioning, and reaction timing.
 </p>
-			<p class="project-details__desc-para">
+		<p class="project-details__desc-para">
   Please do check out the game to see all the bosses in action or refer to <a href="https://www.youtube.com/watch?v=IC3S_fDLqsg" target="_blank">this video here</a>.
 </p>
-			<p class="project-details__desc-para">
+		<p class="project-details__desc-para">
   One of the most challenging mechanics that I encountered involved a set of projectiles rotating around a boss.
   Each projectile existed as an independent actor, which meant they could not be rotated
   together around a shared axis using standard rotation logic.
 </p>
-			<p class="project-details__desc-para">
+		<p class="project-details__desc-para">
   To achieve the rotating orb pattern, I implemented a custom solution using parametric equations:
 </p>
-			<pre class="project-details__desc-code">
+		<pre class="project-details__desc-code">
   (u + r * cos(t), v + r * sin(t))
 </pre>
-			<div class="project-details__media">
-				<video controls class="project-details__video">
-					<source src="./assets/video/project-clock-video.mp4" type="video/mp4"/>
+		<div class="project-details__media">
+			<video controls class="project-details__video">
+				<source src="./assets/video/project-clock-video.mp4" type="video/mp4"/>
     Your browser does not support the video tag.
   </video>
-				<img src="./assets/png/project-clock-math-bp.png" alt="Clock Boss Blueprint Screenshot" class="project-details__showcase-img"/>
-			</div>
-			<p class="project-details__desc-para">
+			<img src="./assets/png/project-clock-math-bp.png" alt="Clock Boss Blueprint Screenshot" class="project-details__showcase-img"/>
+		</div>
+		<p class="project-details__desc-para">
   I used <a href="https://www.desmos.com/calculator/yvz3rho2xl" target="_blank">Desmos</a> to visualize the function and then translated the behavior into Unreal's Blueprint system using Math nodes. This gave me precise control over the orb positioning and resulted in one of the most visually satisfying mechanics in the game.
 </p>
-			<p class="project-details__desc-para">
+		<p class="project-details__desc-para">
   This approach provided precise control over projectile positioning, allowed easy tuning of
   speed and radius, and resulted in a visually striking and mechanically readable boss pattern.
 </p>
-			<div class="project-details__tools-used">
-				<h3 class="project-details__content-title">Tools Used</h3>
-				<div class="skills">
-					<div class="skills__skill">Unreal Engine 5</div>
-					<div class="skills__skill">C++/Blueprints</div>
-					<div class="skills__skill">SVN</div>
-					<div class="skills__skill">Gameplay Programming</div>
-					<div class="skills__skill">AI Systems & State Logic</div>
-					<div class="skills__skill">Math-Driven Gameplay Mechanics</div>
-					<div class="skills__skill">Animation Blueprinting</div>
-					<div class="skills__skill">UI Programming</div>
-					<div class="skills__skill">Rapid Prototyping</div>
-					<div class="skills__skill">Performance Optimization</div>
-				</div>
-				<div class="project-details__links">
-					<h3 class="project-details__content-title">See Live</h3>
-					<a href="https://veeyuh.itch.io/clocktergeist" class="btn btn--med btn--theme project-details__links-btn" target="_blank">Play on Itch.io</a>
-				</div>
+		<div class="project-details__tools-used">
+			<h3 class="project-details__content-title">Tools Used</h3>
+			<div class="skills">
+				<div class="skills__skill">Unreal Engine 5</div>
+				<div class="skills__skill">C++/Blueprints</div>
+				<div class="skills__skill">SVN</div>
+				<div class="skills__skill">Gameplay Programming</div>
+				<div class="skills__skill">AI Systems & State Logic</div>
+				<div class="skills__skill">Math-Driven Gameplay Mechanics</div>
+				<div class="skills__skill">Animation Blueprinting</div>
+				<div class="skills__skill">UI Programming</div>
+				<div class="skills__skill">Rapid Prototyping</div>
+				<div class="skills__skill">Performance Optimization</div>
+			</div>
+			<div class="project-details__links">
+				<h3 class="project-details__content-title">See Live</h3>
+				<a href="https://veeyuh.itch.io/clocktergeist" class="btn btn--med btn--theme project-details__links-btn" target="_blank">Play on Itch.io</a>
 			</div>
 		</div>
 	</div>
+</div>
 </section>
 <footer class="main-footer">
 	<div class="main-container">
