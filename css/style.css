@@ -432,7 +432,6 @@ textarea {
 
 .project-details__content {
   padding: 8rem 0;
-  max-width: 90rem;
   margin: auto; }
   .project-details__content-title {
     font-weight: 700;
@@ -451,7 +450,6 @@ textarea {
 
 .project-details__content-main {
   width: 100%;
-  max-width: 70rem;
   margin: auto; }
 
 .project-details__desc {
@@ -733,10 +731,9 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin: 1.5rem 0;
+  margin: 0 0 4rem 0;
 }
 
-.project-details__video,
 .project-details__showcase-img {
   flex: 1 1 45%; /* Each takes ~45% of width */
   max-width: 100%;
@@ -787,9 +784,27 @@ textarea {
   margin: 1.5rem 0 2rem 0;
 }
 
-.project-details__video {
+/* --- YouTube / iframe embeds (ratio wrapper) --- */
+.project-details__video-embed {
   position: relative;
-  padding-top: 56.25%; /* 16:9 ratio */
+  padding-top: 56.25%; /* 16:9 */
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.project-details__video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* --- MP4 video tag --- */
+.project-details__video-file {
+  width: 100%;
+  padding-top: 1%;
+  border-radius: 8px;
 }
 
 .project-details__video iframe {

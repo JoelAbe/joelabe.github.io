@@ -76,18 +76,15 @@
 		<section class="project-details">
 			<div class="main-container">
 				<div class="project-details__content">
-					<div class="project-details__showcase-img-cont">
-						<img src="./assets/png/project-clock-image.png" alt="Blueprint for the last boss" class="project-details__showcase-img"/>
-					</div>
 					<div class="project-details__content-main">
 						<div class="project-details__desc">
 							<h3 class="project-details__content-title">Project Overview</h3>
 							<div class="project-details__video-grid">
-								<div class="project-details__video">
+								<div class="project-details__video-embed">
 									<iframe src="https://www.youtube.com/embed/IC3S_fDLqsg?si=VIyTQZeguP0F2eHN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 								</iframe>
 							</div>
-							<div class="project-details__video">
+							<div class="project-details__video-embed">
 								<iframe src="https://www.youtube.com/embed/Nd1e68Kzx4E?si=fqy3bUaOWukGoYaf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 							</iframe>
 						</div>
@@ -125,9 +122,6 @@
   As the lead gameplay programmer, I designed and implemented behavior systems for all three bosses in Clocktergeist. Each boss introduced unique mechanics, patterns, and environmental challenges to push the player's movement, positioning, and reaction timing.
 </p>
 		<p class="project-details__desc-para">
-  Please do check out the game to see all the bosses in action or refer to <a href="https://www.youtube.com/watch?v=IC3S_fDLqsg" target="_blank">this video here</a>.
-</p>
-		<p class="project-details__desc-para">
   One of the most challenging mechanics that I encountered involved a set of projectiles rotating around a boss.
   Each projectile existed as an independent actor, which meant they could not be rotated
   together around a shared axis using standard rotation logic.
@@ -139,7 +133,7 @@
   (u + r * cos(t), v + r * sin(t))
 </pre>
 		<div class="project-details__media">
-			<video controls class="project-details__video">
+			<video controls class="project-details__video-file">
 				<source src="./assets/video/project-clock-video.mp4" type="video/mp4"/>
     Your browser does not support the video tag.
   </video>
