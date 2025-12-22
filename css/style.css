@@ -731,17 +731,16 @@ textarea {
 
 .project-details__media {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 2rem 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0;
 }
 
-.project-details__video {
-  width: 100%;
-  max-width: 800px; /* Adjust width as needed */
+.project-details__video,
+.project-details__showcase-img {
+  flex: 1 1 45%; /* Each takes ~45% of width */
+  max-width: 100%;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.15);
 }
 
 .project-details__desc-para a {
@@ -753,4 +752,58 @@ textarea {
 
 .project-details__desc-para a:hover {
   color: #004a8d;
+}
+
+.project-details__highlights {
+  margin: 3rem 0 4rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-details__highlights li {
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 1.4rem;
+  font-size: 1.7rem;
+  line-height: 1.6;
+  color: #555;
+  font-weight: 500;
+}
+
+.project-details__highlights li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  color: #0062b9;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.project-details__video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin: 1.5rem 0 2rem 0;
+}
+
+.project-details__video {
+  position: relative;
+  padding-top: 56.25%; /* 16:9 ratio */
+}
+
+.project-details__video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .project-details__video-grid {
+    grid-template-columns: 1fr;
+  }
 }
