@@ -4,13 +4,17 @@
 
     <div class="paragraph">
       <div>
-        I'm <strong>John Matrix</strong>, a former Delta Force operative, now a hobbyist lumberjack.<br/>
-        I spend my days living alone with my daughter Jenny, and cutting trees and carrying trunks around to keep in shape.
+        I'm <strong>Joel Abraham Orethu</strong>, a gameplay engineer with 3 years of experience working in <strong>Unity (C#)</strong> and <strong>Unreal Engine 5 (C++ / Blueprints)</strong>.
+        I love designing, creating and programming modular mechanics and putting them together to form brilliant projects.
       </div>
 
-      <div style="margin-top: 20px;">I've worked on  <router-link to="/game-projects">stuff</router-link>, on <router-link to="/other-projects">other stuff</router-link>, and took part in <router-link to="/resume">a few things</router-link> as well.</div>
+      <div style="margin-top: 20px;">
+        I've worked on PC, mobile, and VR projects, building combat, AI, player controllers, UI, and the backend and tooling around them.
+      </div>
 
-      <div style="margin-top: 40px;">I'm <strong>currently looking for a job</strong> as a monk, like my good friend John Rambo did a few years back. You can reach me at <a href="mailto:johnmatrix@deltaforce.us">johnmatrix@deltaforce.us</a> or <router-link to="/contact">through here</router-link>.</div>
+      <div style="margin-top: 20px;">
+        I'm currently working as an Gameplay Engineer at <a href="https://arbadevelopmentstudios.com/">Arba Development Studios</a>. You can reach me at <a href="mailto:joelorethu@gmail.com">joelorethu@gmail.com</a>.
+      </div>
     </div>
 
     <div class="photo">
@@ -31,6 +35,13 @@
 .photo {
   margin-top: 50px;
   text-align: center;
+}
+
+.photo img {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 @media only screen and (min-width: 620px){
