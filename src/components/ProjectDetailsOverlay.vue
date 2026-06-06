@@ -90,10 +90,19 @@ h1.dialog-title {
 }
 
 a.dialog-close-button {
-  cursor:pointer;
+  cursor: pointer;
   font-size: 1.4em;
   display: inline-block;
-  margin: 0 auto;
+  margin: 20px auto;
+  padding: 10px 28px;
+  background-color: #c0392b;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+a.dialog-close-button:hover {
+  background-color: #a5281a;
 }
 
 @media only screen and (min-width: 620px){
