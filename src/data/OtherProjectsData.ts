@@ -7,7 +7,7 @@ export default [
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Engine:</strong> Unreal Engine 5
+        <strong>Engine:</strong> Unreal Engine 5 &nbsp;·&nbsp; <strong>Type:</strong> Game Jam &nbsp;·&nbsp; <strong>Platform:</strong> PC
     </div>
 
     <h2>Context</h2>
@@ -22,7 +22,7 @@ export default [
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Engine:</strong> Unity
+        <strong>Engine:</strong> Unity &nbsp;·&nbsp; <strong>Type:</strong> Game Jam &nbsp;·&nbsp; <strong>Platform:</strong> PC
     </div>
 
     <h2>Context</h2>
@@ -37,7 +37,7 @@ export default [
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Engine:</strong> Unity
+        <strong>Engine:</strong> Unity &nbsp;·&nbsp; <strong>Type:</strong> Game Jam &nbsp;·&nbsp; <strong>Platform:</strong> PC
     </div>
 
     <h2>Context</h2>
