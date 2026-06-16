@@ -576,7 +576,7 @@ export default [
     </div>
     `, "#6c5ce7", true, false),
 
-    new ProjectData("false-awakening", "False Awakening", "img/projects/false-awakening/icon.png", `
+    new ProjectData("false-awakening", "False Awakening", "img/projects/false-awakening/icon.gif", `
     <div class="paragraph">
         <div class="notice">You can play the game here: <a href="https://joelabe.itch.io/false-awakening" target="_blank">joelabe.itch.io/false-awakening</a></div>
     </div>

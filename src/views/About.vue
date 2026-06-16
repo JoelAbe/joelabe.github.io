@@ -13,7 +13,7 @@
       </div>
 
       <div style="margin-top: 20px;">
-        I'm currently working as an Gameplay Engineer at <a href="https://arbadevelopmentstudios.com/">Arba Development Studios</a>. You can reach me at <a href="mailto:joelorethu@gmail.com">joelorethu@gmail.com</a>.
+        I'm currently working as a Gameplay Engineer at <a href="https://arbadevelopmentstudios.com/">Arba Development Studios</a>. You can reach me at <a href="mailto:joelorethu@gmail.com">joelorethu@gmail.com</a>.
       </div>
     </div>
 
