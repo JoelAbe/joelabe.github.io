@@ -433,6 +433,21 @@ export default [
         </ul>
     </div>
 
+    <h2>SDK Contribution</h2>
+
+    <div class="paragraph">
+        While the majority of my Reactional engagement was on demo and integration projects, I also contributed directly to the Reactional cross-platform SDK — the platform that client studios integrate into their own games and applications.
+        <br/><br/>
+        Contributions included:
+        <ul>
+            <li>Public API additions across the SDK's developer-facing surfaces</li>
+            <li>The Reactional Unity Plugin startup wizard (built with UI Toolkit), which ships packaged with the SDK and guides new developers through initial integration</li>
+            <li>Documentation writing and review for the SDK's external integrators — reducing common onboarding friction points observed with new users</li>
+            <li>Code polish and utility refactoring across shipped SDK components</li>
+        </ul>
+        Contribution was weighted toward developer experience — API, tooling, and documentation — rather than core engine work.
+    </div>
+
     <h2>Selected Work</h2>
 
     <div class="paragraph">
