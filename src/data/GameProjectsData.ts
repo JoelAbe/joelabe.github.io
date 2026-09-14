@@ -591,20 +591,82 @@ export default [
     </div>
     `, "#6c5ce7", true, false),
 
-    new ProjectData("glyphweaver", "Glyphweaver", "img/projects/glyphweaver/icon.gif", `
+    new ProjectData("automotive-hmi", "Automotive HMI", "img/projects/automotive-hmi/icon.gif", `
     <div class="paragraph">
-        <div class="notice">You can play the game here: <a href="https://veeyuh.itch.io/glyphweaver" target="_blank">veeyuh.itch.io/glyphweaver</a></div>
+        <div class="notice">Shown at the <strong>Shanghai Auto Show 2025</strong> as part of Unity China's in-vehicle HMI showcase. You can see it in action here: <a href="https://www.youtube.com/watch?v=mh5rTP0wz-8" target="_blank">Automotive HMI showcase video</a></div>
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Engine:</strong> Unreal Engine 5 &nbsp;·&nbsp; <strong>Type:</strong> Game Jam &nbsp;·&nbsp; <strong>Platform:</strong> PC
+        <strong>Engine:</strong> Unity &nbsp;·&nbsp; <strong>Clients:</strong> Reactional Music &amp; Unity China &nbsp;·&nbsp; <strong>Type:</strong> Simulation / HMI Prototype
     </div>
 
     <h2>Context</h2>
+
     <div class="paragraph">
-        <em>Content coming soon.</em>
+        Automotive HMI — the in-cabin interface a driver actually sees and touches — is increasingly built in real-time 3D engines rather than traditional UI frameworks. Unity China was preparing an in-vehicle HMI showcase for the Shanghai Auto Show, and Reactional's adaptive music system was to be demonstrated reacting live to driving state.
+        <br/><br/>
+        I built the driving simulation that made that demonstrable: a self-contained Unity environment where a user drives a vehicle through a road network while the music system responds to what the vehicle is doing. The prototype served as both a working proof of concept and the reference implementation that Unity's own HMI team later built from for the show floor scene.
     </div>
-    `, "#a67c00", false, true),
+
+    <h2>What I Built</h2>
+
+    <div class="paragraph">
+        <strong>Vehicle simulation</strong>
+        <ul>
+            <li>A drivable vehicle controller with driving physics tuned for believable response — acceleration, braking and steering feel calibrated for a human at the wheel rather than for physical validation</li>
+            <li>Exposed vehicle state (speed, steering, driving mode) as hooks that could be tied directly into Reactional's engine, letting driving behaviour trigger music features, stingers and parameter changes</li>
+        </ul>
+    </div>
+
+    <div class="paragraph">
+        <strong>Procedural road environment</strong>
+        <ul>
+            <li>Built road networks using Unity's Spline package, so routes could be authored and reshaped quickly rather than modelled by hand</li>
+            <li>Designed and assembled the surrounding test world the vehicle drives through</li>
+            <li>Day/night cycle, toggleable at runtime, to demonstrate the HMI under different lighting conditions</li>
+        </ul>
+    </div>
+
+    <div class="paragraph">
+        <strong>Music-reactive systems &amp; instrumentation</strong>
+        <ul>
+            <li>Wired simulated driving state into Reactional's adaptive music engine so the score responded to how the vehicle was being driven</li>
+            <li>Built the UI instrumentation layer used to expose, test and tune Reactional parameters live in-scene</li>
+        </ul>
+    </div>
+
+    <h2>Handoff</h2>
+
+    <div class="paragraph">
+        The prototype's real deliverable was not the demo itself but what Unity's HMI team could take from it. I wrote and advised on the scripts and trigger systems they subsequently used to reproduce the Reactional integration inside their own show scene — which meant building for legibility and reuse by another team rather than for a single self-contained build.
+        <br/><br/>
+        Working across a client (Reactional), a platform holder (Unity China) and a fixed external deadline meant scope discipline mattered more than feature count: the demo needed to be reliable and readable on a show floor, not exhaustive.
+    </div>
+
+    <h2>Related: Automotive HMI Demo (Unreal Engine)</h2>
+
+    <div class="paragraph">
+        An earlier Reactional automobile demo, built in Unreal Engine, covered adjacent ground and fed into how I approached the Unity prototype:
+        <ul>
+            <li>Drivable vehicle through a street environment with Reactional music integrated</li>
+            <li>HMI instrumentation — speedometer, blinkers, selectable drive modes</li>
+            <li>Toggleable day/night cycle</li>
+            <li>An obstacle system with driver-facing warning indicators</li>
+        </ul>
+    </div>
+
+    <h2>Why This Project Matters</h2>
+
+    <div class="paragraph">
+        This is the work of mine that sits closest to simulation engineering rather than game development. It required translating real-world vehicle behaviour into a real-time simulation, deciding deliberately where fidelity was worth paying for and where perceptual plausibility was enough, and exposing simulated state cleanly enough for entirely separate systems — and a separate team — to consume it.
+        <br/><br/>
+        It also reflects how I prefer to work: build the thing that proves the idea, then make it legible enough that someone else can carry it further.
+    </div>
+
+    <div class="paragraph center">
+        <iframe class="youtube" src="https://www.youtube.com/embed/mh5rTP0wz-8" frameborder="0" allowfullscreen></iframe>
+    </div>
+    `, "#c0392b", false, true),
 
     new ProjectData("poly-run", "Poly Run", "img/projects/poly-run/icon.png", `
     <div class="paragraph">

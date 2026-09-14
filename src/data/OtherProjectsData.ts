@@ -75,6 +75,21 @@ export default [
     </div>
     `, "#7fb3d5", true, false),
 
+    new ProjectData("glyphweaver", "Glyphweaver", "img/projects/glyphweaver/icon.gif", `
+    <div class="paragraph">
+        <div class="notice">You can play the game here: <a href="https://veeyuh.itch.io/glyphweaver" target="_blank">veeyuh.itch.io/glyphweaver</a></div>
+    </div>
+
+    <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
+        <strong>Engine:</strong> Unreal Engine 5 &nbsp;·&nbsp; <strong>Type:</strong> Game Jam &nbsp;·&nbsp; <strong>Platform:</strong> PC
+    </div>
+
+    <h2>Context</h2>
+    <div class="paragraph">
+        <em>Content coming soon.</em>
+    </div>
+    `, "#a67c00", true, false),
+
     new ProjectData("pyro-purge", "Pyro Purge", "img/projects/pyro-purge/icon.png", `
     <div class="paragraph">
         <div class="notice">You can play the game here: <a href="https://joelabe.itch.io/pyro-purge" target="_blank">joelabe.itch.io/pyro-purge</a></div>
