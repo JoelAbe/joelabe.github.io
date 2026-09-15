@@ -8,6 +8,7 @@
               :class="{ 'wide': project.isWide, 'high': project.isHigh }">
             <div class="project-item-image" :style="{ 'background-image': 'url(' + project.iconUrl + ')' }">
             </div>
+            <div v-if="project.engine" class="engine-badge">{{ project.engine }}</div>
             <div class="title-bar" :style="{ 'background-color': project.accentColor + 'DD' }">
                 <div class="title-text">
                   {{ project.name }}
@@ -97,6 +98,20 @@ filter: brightness(120%);
 
 .title-text {
   padding: 10px;
+}
+
+.engine-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 9px;
+  border-radius: 4px;
+  background-color: rgba(20, 20, 20, 0.78);
+  color: #f0f0f0;
+  font-size: 0.75em;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 @media only screen and (min-width: 620px){

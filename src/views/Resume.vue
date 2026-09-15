@@ -3,10 +3,10 @@
     <h1>Resume</h1>
 
     <div class="paragraph">
-      I'm <strong>Joel Abraham Orethu</strong>, a gameplay engineer based in Abu Dhabi, UAE.
-      <br />After graduating in Computer Science from an Engineering college in 2023, I've been working at <a href="https://arbadevelopmentstudios.com/" target="_blank">ArBa Development Studios</a> for 3 years as a Gameplay Engineer, shipping titles across PC (Steam), mobile (Play Store / App Store) and VR.
+      I'm <strong>Joel Abraham Orethu</strong>, a gameplay and real-time 3D engineer based in Abu Dhabi, UAE.
+      <br />After graduating in Computer Science from an Engineering college in 2023, I've been working at <a href="https://arbadevelopmentstudios.com/" target="_blank">ArBa Development Studios</a> for 3 years as a Gameplay Engineer, shipping titles across PC (Steam), mobile (Play Store / App Store) and VR — alongside simulation and HMI prototypes for clients outside games.
       <br />
-	  <br />I love designing, creating and programming modular mechanics and putting them together to form brilliant projects — most days that means digging into Unity (C#) or Unreal Engine 5 (C++ / Blueprints).
+	  <br />I love designing, creating and programming modular mechanics and putting them together to form brilliant projects — most days that means digging into Unity (C#) or Unreal Engine 5 (C++ / Blueprints), and I work across both rather than in one.
       <br />I enjoy working closely with design, audio and art teams, and occasionally taking the lead programmer seat on project mechanics and game jams.
       <br />
       <br />Besides development and video games, I'm passionate about modding, Lego and buildable sets, and physical activities like weight lifting, walking and basketball.
@@ -36,7 +36,7 @@
         <ul>
           <li><strong><a href="https://store.steampowered.com/app/3553150/The_Cascadier/" target="_blank">Cascadier</a></strong> (Enchanted Arcade, Steam) — Roguelike coin pusher. Re-architected ability/trinket systems using ScriptableObjects and a multi-pathway tier structure, designed the core "First Coin" progression mechanic, and led physics & performance work that took the in-editor framerate from ~15 to a stable 60.</li>
           <li><strong>Bad Company: Can't Get Enough</strong> (Reactional Games, App Store) — Match-3 mobile game. Led two major gameplay reworks, built mission/achievement systems, difficulty scaling and JSON save/load, and integrated Firebase, AppsFlyer and IronSource for monetization & analytics.</li>
-          <li><strong>Reactional SDK & Demos</strong> — Embedded with the Reactional Games team for ~2 years across 10+ projects: built the Reactional Unity Plugin startup wizard with UI Toolkit, ported the B2C storefront and DiscoBooth demos from Unity to UE5 (UMG) with a custom .NET payment-simulation server, and prototyped an automotive HMI demo for Unity China featured at the Shanghai Auto Show 2025.</li>
+          <li><strong>Reactional SDK & Demos</strong> — Embedded with the Reactional Games team for ~2 years across 10+ projects: built the Reactional Unity Plugin startup wizard with UI Toolkit, ported the B2C storefront and DiscoBooth demos from Unity to UE5 (UMG) with a custom .NET payment-simulation server, and built automotive HMI driving prototypes in both UE5 and Unity — the Unity build featured at the Shanghai Auto Show 2025 as part of Unity China's in-vehicle HMI showcase.</li>
           <li><strong>Reusable gameplay systems</strong> — Modular AI (behaviors, cone-of-vision detection, cover-to-cover logic), player controllers with movement/combat/animation sync, and editor tooling.</li>
         </ul>
       </div>
@@ -83,6 +83,8 @@
         <div>Editor tooling</div>
         <div>UI Development</div>
         <div>Performance optimization</div>
+        <div>Real-time physics &amp; simulation</div>
+        <div>Middleware / SDK integration</div>
       </div>
 
       <div class="skill-set">

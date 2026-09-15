@@ -269,7 +269,7 @@ export default [
         <br/><br/>
         The <strong>trinket upgrade system</strong> is the part I'm proudest of as an engineer. The modularity it gave designers compounded month after month: new upgrades became inspector authoring instead of code changes, and the architecture is the kind that would pay for itself again on the next game. The <strong>FirstCoin system</strong> is the part I'm proudest of as a designer-engineer: a mechanic the studio could ship, balance, and extend without me sitting at every step. The <strong>physics work</strong> is the part I'm proudest of as a craftsman: a system that did less, ran faster, and felt better — and that the rest of the team adopted because the result spoke for itself.
     </div>
-    `, "#b8860b", false, true),
+    `, "#b8860b", false, true, "Unity 6"),
 
     new ProjectData("clocktergeist", "Clocktergeist", "img/projects/clocktergeist/icon.gif", `
     <div class="paragraph">
@@ -407,7 +407,7 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/IC3S_fDLqsg" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#5a3e8a", false, true),
+    `, "#5a3e8a", false, true, "Unreal Engine 5"),
 
     new ProjectData("reactional-music", "Reactional Games", "img/projects/reactional/icon.png", `
     <div class="paragraph">
@@ -482,7 +482,7 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/OhvW-WbTE5U" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#4f5fff", false, true),
+    `, "#4f5fff", false, true, "Unity · UE5"),
 
     new ProjectData("melody-match", "Melody Match: Galaxy Puzzle", "img/projects/melody-match/icon.png", `
     <div class="paragraph">
@@ -589,7 +589,7 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/MW9Xmk3MhdQ" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#6c5ce7", true, false),
+    `, "#6c5ce7", true, false, "Unity"),
 
     new ProjectData("automotive-hmi", "Automotive HMI", "img/projects/automotive-hmi/icon.gif", `
     <div class="paragraph">
@@ -597,18 +597,31 @@ export default [
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Engine:</strong> Unity &nbsp;·&nbsp; <strong>Clients:</strong> Reactional Music &amp; Unity China &nbsp;·&nbsp; <strong>Type:</strong> Simulation / HMI Prototype
+        <strong>Engines:</strong> Unreal Engine 5 &amp; Unity &nbsp;·&nbsp; <strong>Clients:</strong> Reactional Music &amp; Unity China &nbsp;·&nbsp; <strong>Type:</strong> Simulation / HMI Prototype
     </div>
 
     <h2>Context</h2>
 
     <div class="paragraph">
-        Automotive HMI — the in-cabin interface a driver actually sees and touches — is increasingly built in real-time 3D engines rather than traditional UI frameworks. Unity China was preparing an in-vehicle HMI showcase for the Shanghai Auto Show, and Reactional's adaptive music system was to be demonstrated reacting live to driving state.
+        Automotive HMI — the in-cabin interface a driver actually sees and touches — is increasingly built in real-time 3D engines rather than traditional UI frameworks. Reactional wanted to show their adaptive music system responding live to driving state, which meant someone had to build a driving simulation convincing enough to drive it.
         <br/><br/>
-        I built the driving simulation that made that demonstrable: a self-contained Unity environment where a user drives a vehicle through a road network while the music system responds to what the vehicle is doing. The prototype served as both a working proof of concept and the reference implementation that Unity's own HMI team later built from for the show floor scene.
+        I built that twice. The first prototype was in <strong>Unreal Engine 5</strong>, establishing what the demo needed to be. The second — larger, and the one shown at the <strong>Shanghai Auto Show 2025</strong> as part of Unity China's in-vehicle HMI showcase — was built in <strong>Unity</strong>, and served as both a working proof of concept and the reference implementation that Unity's own HMI team built from for the show floor scene.
     </div>
 
-    <h2>What I Built</h2>
+    <h2>The Unreal Prototype</h2>
+
+    <div class="paragraph">
+        The first version established the shape of the demo in Unreal Engine 5:
+        <ul>
+            <li>A drivable vehicle moving through a street environment with Reactional's music system integrated</li>
+            <li>HMI instrumentation — speedometer, blinkers, and selectable drive modes</li>
+            <li>A toggleable day/night cycle</li>
+            <li>An obstacle system with driver-facing warning indicators</li>
+        </ul>
+        Building the driver-facing instrumentation first made it clear which pieces of vehicle state actually mattered as signals — which is what the Unity build was then designed around.
+    </div>
+
+    <h2>The Unity Build — What I Built</h2>
 
     <div class="paragraph">
         <strong>Vehicle simulation</strong>
@@ -643,22 +656,12 @@ export default [
         Working across a client (Reactional), a platform holder (Unity China) and a fixed external deadline meant scope discipline mattered more than feature count: the demo needed to be reliable and readable on a show floor, not exhaustive.
     </div>
 
-    <h2>Related: Automotive HMI Demo (Unreal Engine)</h2>
-
-    <div class="paragraph">
-        An earlier Reactional automobile demo, built in Unreal Engine, covered adjacent ground and fed into how I approached the Unity prototype:
-        <ul>
-            <li>Drivable vehicle through a street environment with Reactional music integrated</li>
-            <li>HMI instrumentation — speedometer, blinkers, selectable drive modes</li>
-            <li>Toggleable day/night cycle</li>
-            <li>An obstacle system with driver-facing warning indicators</li>
-        </ul>
-    </div>
-
     <h2>Why This Project Matters</h2>
 
     <div class="paragraph">
         This is the work of mine that sits closest to simulation engineering rather than game development. It required translating real-world vehicle behaviour into a real-time simulation, deciding deliberately where fidelity was worth paying for and where perceptual plausibility was enough, and exposing simulated state cleanly enough for entirely separate systems — and a separate team — to consume it.
+        <br/><br/>
+        Building it in both Unreal Engine 5 and Unity also meant deciding each time what was engine-agnostic — the vehicle model, the state signals, the interface into Reactional — and what had to be rebuilt against the engine in front of me.
         <br/><br/>
         It also reflects how I prefer to work: build the thing that proves the idea, then make it legible enough that someone else can carry it further.
     </div>
@@ -666,7 +669,7 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/mh5rTP0wz-8" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#c0392b", false, true),
+    `, "#c0392b", false, true, "Unity · UE5"),
 
     new ProjectData("poly-run", "Poly Run", "img/projects/poly-run/icon.png", `
     <div class="paragraph">
@@ -742,5 +745,5 @@ export default [
             <li>Think about player experience holistically, not just isolated mechanics</li>
         </ul>
     </div>
-    `, "#52606c", true, false),
+    `, "#52606c", true, false, "Unity"),
 ];

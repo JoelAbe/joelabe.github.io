@@ -73,7 +73,7 @@ export default [
             <li>Balance narrative and mechanics without overengineering</li>
         </ul>
     </div>
-    `, "#7fb3d5", true, false),
+    `, "#7fb3d5", true, false, "Unity"),
 
     new ProjectData("glyphweaver", "Glyphweaver", "img/projects/glyphweaver/icon.gif", `
     <div class="paragraph">
@@ -85,10 +85,28 @@ export default [
     </div>
 
     <h2>Context</h2>
+
     <div class="paragraph">
-        <em>Content coming soon.</em>
+        Glyphweaver is a 3D action-adventure game with puzzle elements, built in Unreal Engine 5 over a month by a team of six. It was one of my earlier UE5 projects, and the one where most of my Blueprint fluency came from.
+        <br/><br/>
+        There were two programmers on the team. The other was more experienced in UE5 and carried the heavier engine-side work, which meant I could take clear ownership of a set of self-contained systems and learn the engine properly by building them rather than by reading about it.
     </div>
-    `, "#a67c00", true, false),
+
+    <h2>What I Owned</h2>
+    <div class="paragraph">
+        <ul>
+            <li><strong>Puzzle logic</strong> — the rules, state and completion conditions behind the game's puzzle encounters</li>
+            <li><strong>World traversal</strong> — interactive world elements and the traversal mechanics connecting them</li>
+            <li><strong>Inventory &amp; spell management</strong> — the systems governing what the player carries and casts</li>
+        </ul>
+        Work was mainly in Blueprints, with some elements dropped into C++ where it made more sense.
+    </div>
+
+    <h2>Why This Project Matters</h2>
+    <div class="paragraph">
+        Glyphweaver was where Unreal stopped being a second engine I could read and started being one I could build in. Owning whole systems on a small team — rather than assisting on someone else's — is what made the difference, and it set up the lead programmer role I took on <strong>Clocktergeist</strong> shortly after.
+    </div>
+    `, "#a67c00", true, false, "Unreal Engine 5"),
 
     new ProjectData("pyro-purge", "Pyro Purge", "img/projects/pyro-purge/icon.png", `
     <div class="paragraph">
@@ -103,7 +121,7 @@ export default [
     <div class="paragraph">
         <em>Content coming soon.</em>
     </div>
-    `, "#d35400", true, false),
+    `, "#d35400", true, false, "Unity"),
 
     new ProjectData("big-bubble-deep-trouble", "Big Bubble Deep Trouble", "img/projects/big-bubble-deep-trouble/icon.png", `
     <div class="paragraph">
@@ -118,5 +136,5 @@ export default [
     <div class="paragraph">
         <em>Content coming soon.</em>
     </div>
-    `, "#3498db", true, false),
+    `, "#3498db", true, false, "Unity"),
 ];
