@@ -19,7 +19,7 @@
       </div>
 
       <ProjectDetailsOverlay
-        v-on:close="showPopup = false"
+        v-on:close="closeDetails"
         :visible="showPopup"
         :title="popupTitle"
         :htmlContent="popupContent"
@@ -49,13 +49,44 @@ export default defineComponent({
       popupContent: "",
     };
   },
+  watch: {
+    // The URL is the source of truth for which project is open, so
+    // /game-projects/robodrive can be linked to directly.
+    "$route.params.projectId": {
+      immediate: true,
+      handler(projectId: string | string[] | undefined) {
+        const id = Array.isArray(projectId) ? projectId[0] : projectId;
+        if (!id) {
+          this.showPopup = false;
+          return;
+        }
+        const item = this.projects.find((p) => p.id === id);
+        if (!item) {
+          this.setProjectId(undefined);
+          return;
+        }
+        this.popupTitle = item.name;
+        this.popupColor = item.accentColor;
+        this.popupContent = item.htmlDescription;
+        this.showPopup = true;
+        window.scrollTo(0, 0);
+      },
+    },
+  },
   methods: {
     showDetails(item: ProjectData) {
-      this.popupTitle = item.name;
-      this.popupColor = item.accentColor;
-      this.popupContent = item.htmlDescription;
-      this.showPopup = true;
-      window.scrollTo(0, 0);
+      this.setProjectId(item.id);
+    },
+    closeDetails() {
+      this.setProjectId(undefined);
+    },
+    setProjectId(projectId: string | undefined) {
+      // replace rather than push, so opening and closing projects
+      // doesn't pile up entries in the browser history
+      this.$router.replace({
+        name: this.$route.name as string,
+        params: projectId ? { projectId } : {},
+      });
     },
   },
 });

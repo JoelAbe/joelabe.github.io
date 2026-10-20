@@ -12,12 +12,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/Resume.vue'),
   },
   {
-    path: '/game-projects',
+    path: '/game-projects/:projectId?',
     name: 'Game Projects',
     component: () => import('../views/GameProjects.vue'),
   },
   {
-    path: '/other-projects',
+    path: '/other-projects/:projectId?',
     name: 'Other Projects',
     component: () => import('../views/OtherProjects.vue'),
   },

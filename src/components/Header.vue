@@ -1,11 +1,11 @@
 <template>
   <div class="header">
     <div class="nav-bar">
-      <router-link to="/">About me</router-link>
-      <router-link to="/game-projects">Featured Projects</router-link>
-      <router-link to="/other-projects">Past Projects</router-link>
-      <router-link to="/resume">Resume</router-link>
-      <router-link to="/contact">Contact</router-link>
+      <router-link to="/" :class="{ 'nav-current': isCurrent('/') }">About me</router-link>
+      <router-link to="/game-projects" :class="{ 'nav-current': isCurrent('/game-projects') }">Featured Projects</router-link>
+      <router-link to="/other-projects" :class="{ 'nav-current': isCurrent('/other-projects') }">Past Projects</router-link>
+      <router-link to="/resume" :class="{ 'nav-current': isCurrent('/resume') }">Resume</router-link>
+      <router-link to="/contact" :class="{ 'nav-current': isCurrent('/contact') }">Contact</router-link>
     </div>
   </div>
 </template>
@@ -15,6 +15,15 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "SiteHeader",
+  methods: {
+    // Path-based rather than router-link-active, so a section stays highlighted
+    // while one of its projects is open (e.g. /game-projects/robodrive).
+    isCurrent(path: string): boolean {
+      const current = this.$route.path;
+      if (path === "/") return current === "/";
+      return current === path || current.startsWith(path + "/");
+    },
+  },
 });
 </script>
 
@@ -41,7 +50,7 @@ a {
   display: inline-block;
 }
 
-.router-link-exact-active {
+.nav-current {
   border: 0px solid @textColor;
   border-bottom-width: 2px;
 }
