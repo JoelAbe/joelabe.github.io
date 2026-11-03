@@ -269,7 +269,7 @@ export default [
         <br/><br/>
         The <strong>trinket upgrade system</strong> is the part I'm proudest of as an engineer. The modularity it gave designers compounded month after month: new upgrades became inspector authoring instead of code changes, and the architecture is the kind that would pay for itself again on the next game. The <strong>FirstCoin system</strong> is the part I'm proudest of as a designer-engineer: a mechanic the studio could ship, balance, and extend without me sitting at every step. The <strong>physics work</strong> is the part I'm proudest of as a craftsman: a system that did less, ran faster, and felt better — and that the rest of the team adopted because the result spoke for itself.
     </div>
-    `, "#b8860b", false, true, "Unity 6"),
+    `, "#b8860b", "Unity 6"),
 
     new ProjectData("robodrive", "RoboDrive", "img/projects/robodrive/icon.gif", `
     <div class="paragraph">
@@ -435,7 +435,7 @@ export default [
             <li><strong>Scenarios don't detect collisions</strong>, and the API isn't lockstep.</li>
         </ul>
     </div>
-    `, "#2d7d9a", false, true, "Unreal Engine 5"),
+    `, "#2d7d9a", "UE5"),
 
     new ProjectData("melody-match", "Melody Match: Galaxy Puzzle", "img/projects/melody-match/icon.png", `
     <div class="paragraph">
@@ -542,7 +542,7 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/MW9Xmk3MhdQ" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#6c5ce7", true, false, "Unity"),
+    `, "#6c5ce7", "Unity"),
 
     new ProjectData("clocktergeist", "Clocktergeist", "img/projects/clocktergeist/icon.gif", `
     <div class="paragraph">
@@ -680,7 +680,7 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/IC3S_fDLqsg" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#5a3e8a", false, true, "Unreal Engine 5"),
+    `, "#5a3e8a", "UE5"),
 
     new ProjectData("automotive-hmi", "Automotive HMI", "img/projects/automotive-hmi/icon.gif", `
     <div class="paragraph">
@@ -760,7 +760,7 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/mh5rTP0wz-8" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#c0392b", false, true, "Unity · UE5"),
+    `, "#c0392b", "Unity · UE5"),
 
     new ProjectData("reactional-music", "Reactional Games", "img/projects/reactional/icon.png", `
     <div class="paragraph">
@@ -835,5 +835,5 @@ export default [
     <div class="paragraph center">
         <iframe class="youtube" src="https://www.youtube.com/embed/OhvW-WbTE5U" frameborder="0" allowfullscreen></iframe>
     </div>
-    `, "#4f5fff", true, false, "Unity · UE5"),
+    `, "#4f5fff", "Unity · UE5"),
 ];

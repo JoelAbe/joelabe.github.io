@@ -12,14 +12,19 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/Resume.vue'),
   },
   {
+    path: '/projects/:projectId?',
+    name: 'Projects',
+    component: () => import('../views/Projects.vue'),
+  },
+  // Old section URLs, kept working because they've been shared in emails
+  // (e.g. /game-projects/robodrive).
+  {
     path: '/game-projects/:projectId?',
-    name: 'Game Projects',
-    component: () => import('../views/GameProjects.vue'),
+    redirect: (to) => ({ name: 'Projects', params: to.params }),
   },
   {
     path: '/other-projects/:projectId?',
-    name: 'Other Projects',
-    component: () => import('../views/OtherProjects.vue'),
+    redirect: (to) => ({ name: 'Projects', params: to.params }),
   },
   {
     path: '/contact',

@@ -62,7 +62,7 @@ a {
   text-decoration: none;
   opacity: 0.5;
 }
-a:hover, .router-link-exact-active {
+a:hover, .router-link-exact-active, .nav-current {
   opacity: 1;
 }
 

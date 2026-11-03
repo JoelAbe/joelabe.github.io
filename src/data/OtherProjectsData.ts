@@ -73,7 +73,7 @@ export default [
             <li>Balance narrative and mechanics without overengineering</li>
         </ul>
     </div>
-    `, "#7fb3d5", true, false, "Unity"),
+    `, "#7fb3d5", "Unity"),
 
     new ProjectData("glyphweaver", "Glyphweaver", "img/projects/glyphweaver/icon.gif", `
     <div class="paragraph">
@@ -106,7 +106,7 @@ export default [
     <div class="paragraph">
         Glyphweaver was where Unreal stopped being a second engine I could read and started being one I could build in. Owning whole systems on a small team — rather than assisting on someone else's — is what made the difference, and it set up the lead programmer role I took on <strong>Clocktergeist</strong> shortly after.
     </div>
-    `, "#a67c00", true, false, "Unreal Engine 5"),
+    `, "#a67c00", "UE5"),
 
     new ProjectData("pyro-purge", "Pyro Purge", "img/projects/pyro-purge/icon.png", `
     <div class="paragraph">
@@ -121,7 +121,7 @@ export default [
     <div class="paragraph">
         <em>Content coming soon.</em>
     </div>
-    `, "#d35400", true, false, "Unity"),
+    `, "#d35400", "Unity"),
 
     new ProjectData("big-bubble-deep-trouble", "Big Bubble Deep Trouble", "img/projects/big-bubble-deep-trouble/icon.png", `
     <div class="paragraph">
@@ -136,7 +136,7 @@ export default [
     <div class="paragraph">
         <em>Content coming soon.</em>
     </div>
-    `, "#3498db", true, false, "Unity"),
+    `, "#3498db", "Unity"),
 
     new ProjectData("poly-run", "Poly Run", "img/projects/poly-run/icon.png", `
     <div class="paragraph">
@@ -212,5 +212,5 @@ export default [
             <li>Think about player experience holistically, not just isolated mechanics</li>
         </ul>
     </div>
-    `, "#52606c", true, false, "Unity"),
+    `, "#52606c", "Unity"),
 ];

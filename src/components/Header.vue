@@ -2,8 +2,7 @@
   <div class="header">
     <div class="nav-bar">
       <router-link to="/" :class="{ 'nav-current': isCurrent('/') }">About me</router-link>
-      <router-link to="/game-projects" :class="{ 'nav-current': isCurrent('/game-projects') }">Featured Projects</router-link>
-      <router-link to="/other-projects" :class="{ 'nav-current': isCurrent('/other-projects') }">Past Projects</router-link>
+      <router-link to="/projects" :class="{ 'nav-current': isCurrent('/projects') }">Projects</router-link>
       <router-link to="/resume" :class="{ 'nav-current': isCurrent('/resume') }">Resume</router-link>
       <router-link to="/contact" :class="{ 'nav-current': isCurrent('/contact') }">Contact</router-link>
     </div>
@@ -17,7 +16,7 @@ export default defineComponent({
   name: "SiteHeader",
   methods: {
     // Path-based rather than router-link-active, so a section stays highlighted
-    // while one of its projects is open (e.g. /game-projects/robodrive).
+    // while one of its projects is open (e.g. /projects/robodrive).
     isCurrent(path: string): boolean {
       const current = this.$route.path;
       if (path === "/") return current === "/";
