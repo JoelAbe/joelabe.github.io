@@ -277,11 +277,11 @@ export default [
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Role:</strong> Solo &nbsp;·&nbsp; <strong>Stack:</strong> Unreal Engine 5.8, C++, Slate, Python &nbsp;·&nbsp; <strong>Domain:</strong> Robotics Simulation
+        <strong>Role:</strong> Solo, a little over a month &nbsp;·&nbsp; <strong>Stack:</strong> Unreal Engine 5.8, C++, Slate, Python, ROS 2, GitHub Actions &nbsp;·&nbsp; <strong>Domain:</strong> Robotics Simulation
     </div>
 
     <div class="paragraph">
-        <strong>A UE5 robotics simulator in C++ with an external API, sensor models, a scenario test suite in CI, and an operator view. Its centrepiece is a measured investigation of how fog defeats lidar obstacle avoidance.</strong>
+        <strong>A UE5 robotics simulator in C++ with sensor models, an external API, a scenario test suite in CI, an operator view and a ROS 2 bridge. Its centrepiece is a measured investigation of how fog defeats lidar obstacle avoidance — and the fix that diagnosis led to.</strong>
     </div>
 
     <div class="paragraph center">
@@ -294,88 +294,39 @@ export default [
     <h2>What It Is</h2>
 
     <div class="paragraph">
-        RoboDrive is a ground-robot simulation platform built in Unreal Engine 5. Not a game — a simulator with real differential-drive kinematics, sensor models with configurable noise, an external API so a third party can drive and observe it, and a scenario suite that runs headless in CI.
+        A ground robot that drives on real differential-drive kinematics over Chaos physics, carries wheel encoders, an IMU, a lidar and a camera on a simulated clock, and estimates its own pose by dead reckoning. It drives itself to goals around obstacles, any external client can drive it over a TCP API, and a ROS 2 node can drive it in simulation time.
         <br/><br/>
-        I built it to answer a question properly rather than approximately: what does it actually take to make a simulation you'd be willing to <em>trust</em>? Anyone can make a robot drive around. The interesting work is everything that determines whether the results mean anything.
+        I built it to answer one question properly: what does it take to make a simulation you'd be willing to <em>trust</em>? Making a robot drive is easy. The interesting work is everything that decides whether its results mean anything.
     </div>
 
-    <h2>Architecture</h2>
+    <h2>Decisions That Keep the Results Honest</h2>
 
     <div class="paragraph">
-        Four C++ modules, with the dependency direction enforced by the build:
         <ul>
-            <li><strong>RoboSim</strong> — vehicle model, sensors, clock, odometry. <em>Cannot depend on the other three modules.</em></li>
-            <li><strong>RoboAutonomy</strong> — in-engine brains</li>
-            <li><strong>RoboApi</strong> — external TCP API</li>
-            <li><strong>RoboDrive</strong> — game module and operator view</li>
+            <li><strong>The simulation doesn't know who's driving.</strong> Four C++ modules, and the build forbids the core simulation from depending on the other three. An in-engine brain, a Python script and a ROS 2 node all look the same to it.</li>
+            <li><strong>The brain never sees ground truth.</strong> It receives a sensor snapshot, never the robot. A brain that can read its true position is tested in a world that will never exist, and every result it produces is optimistic in a way you can't measure. Truth goes on a separate channel, for display and judging only. <em>(<a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/decisions/0009-brains-receive-a-snapshot.md" target="_blank">ADR 0009</a>, one of 17 decision records.)</em></li>
+            <li><strong>ROS conventions inside, not just at the edge.</strong> Coordinates follow REP-103 internally and are converted at the Unreal boundary. Unreal is left-handed, ROS right-handed, and a missed handedness flip produces mirrored rotations that look entirely plausible, so the conversion is tested rather than trusted.</li>
         </ul>
-        The constraint that RoboSim can't reference the others is the important one. The simulation has no idea what's driving it — an in-engine brain, a Python client over TCP, or eventually a ROS 2 bridge are all equivalent from its side. That's what makes the autonomy swappable rather than merely abstracted.
-        <br/><br/>
-        Coordinates follow <strong>ROS REP-103</strong> internally (z-up, right-handed), converted at the Unreal boundary. Unreal is left-handed and z-up; ROS is right-handed. Getting the handedness flip wrong produces mirrored rotations that look entirely plausible, so the conversion is tested rather than trusted.
-    </div>
-
-    <h2>Keeping Ground Truth Away From the Brain</h2>
-
-    <div class="paragraph">
-        The design decision I'd defend hardest: <strong>brains receive a sensor snapshot, never the robot.</strong>
-        <br/><br/>
-        It would have been far easier to hand the autonomy a pointer to the vehicle and let it read its true position. It would also have quietly invalidated everything. A brain that can see ground truth is being tested in a world that will never exist, and every result it produces is optimistic in a way you can't measure.
-        <br/><br/>
-        So ground truth is published on a separate channel from sensor output. The operator view displays it, clearly labelled as truth. Odometry reset is an operator action, not something the brain can do to itself. The autonomy only ever sees what a real robot would see — noisy, sampled at each sensor's own rate, and wrong in characteristic ways.
-        <br/><br/>
-        <em>See <a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/decisions/0009-brains-receive-a-snapshot.md" target="_blank">ADR 0009</a> — one of 15 architecture decision records in the repo.</em>
     </div>
 
     <h2>Measuring Odometry Drift</h2>
 
     <div class="paragraph">
-        Dead reckoning drifts. Everyone knows that. I wanted to know <em>how</em>, and by how much, per error source — so I ran a stub driver on an identical fixed path (0.5 m/s around a 2 m radius), changed one variable per run, and compared against ground truth at 50 Hz.
-    </div>
-
-    <div class="paragraph">
-        <table style="width:100%; border-collapse:collapse; font-size:0.9em;">
-            <tr style="border-bottom:1px solid #555;">
-                <th style="text-align:left; padding:6px;">Run</th>
-                <th style="text-align:left; padding:6px;">Distance</th>
-                <th style="text-align:left; padding:6px;">Final error</th>
-                <th style="text-align:left; padding:6px;">Odom heading</th>
-                <th style="text-align:left; padding:6px;">Gyro heading</th>
-            </tr>
-            <tr><td style="padding:6px;">Baseline</td><td style="padding:6px;">25.3 m</td><td style="padding:6px;">0.009 m (0.04%)</td><td style="padding:6px;">0.3°</td><td style="padding:6px;">0.0°</td></tr>
-            <tr><td style="padding:6px;">Wheel radius +2%</td><td style="padding:6px;">28.6 m</td><td style="padding:6px;">0.426 m (1.49%)</td><td style="padding:6px;">11.6°</td><td style="padding:6px;">0.0°</td></tr>
-            <tr><td style="padding:6px;">Encoder noise (σ 3 rad/s)</td><td style="padding:6px;">24.0 m</td><td style="padding:6px;">1.570 m (6.54%)</td><td style="padding:6px;">−25.3°</td><td style="padding:6px;">−0.1°</td></tr>
-            <tr><td style="padding:6px;">Slip event</td><td style="padding:6px;">21.3 m</td><td style="padding:6px;">1.290 m (6.06%)</td><td style="padding:6px;">7.0°</td><td style="padding:6px;">−1.1°</td></tr>
-        </table>
-    </div>
-
-    <div class="paragraph">
-        Each error source has a distinct signature. Calibration error (wheel radius) grows steadily with distance. Encoder noise behaves as a random walk, wandering either side of truth and growing with roughly the square root of distance. Slip isn't drift at all — it's a sudden ~17° heading step during a commanded spin, which odometry never recovers from.
+        Same fixed path, one injected error per run, compared against ground truth at 50 Hz. Each error source left a distinct signature: calibration error grew steadily with distance, encoder noise wandered as a random walk, and wheel slip produced a sudden 17° heading step that odometry never recovered.
         <br/><br/>
-        One result I didn't expect: the +2% wheel radius error read as 1.49%, not 2%. On a circular path, part of the scale error reshapes the circle and cancels each lap. <strong>The path shape determines how calibration error presents.</strong> A straight-line test would have shown the full figure — and would have told me something different about the same bug.
-        <br/><br/>
-        The gyroscope stayed within 0.2° on clean runs and 1.4° through slip, while odometry lost up to 25°. Encoders are fooled by slip because they measure wheel rotation, not travel; the gyro isn't, but has no position information and accumulates bias without bound. Their failure modes don't overlap — which is the concrete argument for fusing them, and for localisation as the layer above rather than better encoders.
-        <br/><br/>
-        <em>Full method and data: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/odometry-drift.md" target="_blank">odometry-drift.md</a></em>
+        One result I didn't expect: a +2% wheel-radius error read as 1.49%, because on a circular path part of the scale error reshapes the circle and cancels each lap. <strong>The test path decides how a calibration bug presents.</strong> And the gyro stayed within about a degree while odometry lost up to 25° — their failure modes don't overlap, which is the concrete case for fusing them.
     </div>
 
     <div class="paragraph center">
         <img src="https://raw.githubusercontent.com/JoelAbe/RoboDrive/main/docs/images/drift_vs_distance.png" alt="Odometry position error against distance travelled, per error source" style="width:100%; max-width:800px; border-radius:6px;" />
     </div>
 
-    <h2>The Fog Investigation</h2>
+    <h2>Fog: The Diagnosis</h2>
 
     <div class="paragraph">
-        This is the part of the project I'd most want to talk about, because the answer turned out not to be the one I expected.
+        I modelled fog on the lidar two ways: <strong>attenuation</strong>, where scattering shortens the range (the 12 m lidar sees 3.3 m at 10 m visibility), and <strong>clutter</strong>, where some light returns from the fog itself. To the brain, a fog echo and an obstacle are identical.
         <br/><br/>
-        I modelled fog on the lidar two ways: <strong>attenuation</strong> (scattering weakens far returns — the 12 m lidar sees 8.6 m at 100 m visibility, 3.3 m at 10 m) and <strong>clutter</strong> (some light returns from the fog itself, mostly close range, independent per beam and per scan). The brain can't distinguish a fog echo from an obstacle, because to the brain they're identical.
-        <br/><br/>
-        The obvious hypothesis is that fog blinds the robot by shortening its sensing range. So I built the sweep to separate the two effects — each visibility level run with echoes on and off, three runs each, on a three-post slalom.
-    </div>
-
-    <div class="paragraph">
-        <strong>Range loss alone was harmless.</strong> With echoes disabled, every run succeeded at every visibility down to 10 m, in the same ~21.5 s as clear air. The robot simply didn't need to see further than it could.
-        <br/><br/>
-        <strong>Clutter was what broke it.</strong> With echoes on, success fell from 1/3 at 100 m visibility to 0/3 at 20 m and below. Successful runs got slower as visibility dropped — 25.6 s at 100 m, 48.7 s at 30 m.
+        The obvious guess is that fog blinds the robot by cutting its range. So the sweep separated the two effects. <strong>Range loss alone was harmless</strong> — with echoes off, every run succeeded down to 10 m visibility. <strong>Clutter was what broke it</strong>: with echoes on, only 3 of 18 runs reached the goal.
     </div>
 
     <div class="paragraph" style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center;">
@@ -390,89 +341,99 @@ export default [
     </div>
 
     <div class="paragraph">
-        Then the surprising part. <strong>Above 20 m visibility, every failure was a false arrival</strong>: the robot stopped 0.5 to 1.9 m short of the goal while believing it had arrived. Below it, the robot simply ran out of time.
+        The surprise was <em>how</em> it failed. Above 20 m visibility, every failure was a <strong>false arrival</strong>: the robot stopped up to 1.9 m short, believing it had arrived. Fog never touches the wheels, yet odometry error grew ten to a hundred times.
         <br/><br/>
-        Fog never touches the wheels. So why was the robot's position estimate wrong? Odometry error at run end was mostly 0.01–0.05 m with echoes off (two runs, at 15 m and 10 m visibility, reached 0.24 m and 0.36 m), and 0.17–1.78 m with them on — roughly ten to a hundred times larger, from a sensor effect that has no physical path to the encoders.
+        The mechanism: clutter made the chosen heading jump between scans, so commands flipped every 0.1 s and the tyres slipped. The simulated encoders count commanded rotation, so slip registered as progress, and a metre of fictional travel built up. The arrival check trusts odometry, so the robot declared victory.
         <br/><br/>
-        The mechanism: clutter makes the chosen clear heading jump between scans, so commands flip every 0.1 s between driving, stopping and turning. The tyres slip under that. But the simulated encoders count <em>commanded</em> rotation, so slip registers as forward progress. Hundreds of small lurches accumulate into more than a metre of entirely fictional travel. The arrival check reads odometry, so the robot concludes it has arrived.
+        The competing explanation was simpler: scraping the slalom posts. The harness can't detect collisions, so I reran the sweep with the posts removed. Same failures, same odometry error. The posts weren't the cause.
         <br/><br/>
-        Below 20 m, a second flaw showed. The brain's "boxed in" give-up timer resets whenever a scan happens to come back clear, and flickering clutter produces exactly that. So in dense fog the robot never gives up — it times out without ever reporting that it's stuck.
+        <em>Full analysis: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/fog.md" target="_blank">fog.md</a> · the fog model, with each formula derived in its comment: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/Source/RoboSim/Public/RoboFog.h" target="_blank">RoboFog.h</a></em>
+    </div>
+
+    <h2>Fog: The Fix</h2>
+
+    <div class="paragraph">
+        The fix came straight from the diagnosis, one change per link in the chain:
+        <ul>
+            <li><strong>A clutter filter</strong> removes the cause. A return only counts if something was seen within 0.15 m of it in each of the previous two scans. A post is still there next scan; a fog echo almost never lands in the same place twice.</li>
+            <li><strong>Smoothed commands</strong> remove the amplifier. Acceleration limits mean the wheels are never asked for more grip than they have, even when the brain changes its mind.</li>
+        </ul>
+        The filter's settings were chosen in a quick 2D model before any code was written: two scans let enough echoes through to fail in dense fog, three did not.
     </div>
 
     <div class="paragraph">
-        <strong>The alternative explanation, and the control.</strong> The obvious competing hypothesis was simpler: the robot was scraping the slalom posts, and the collisions caused the odometry error. The scenario harness doesn't detect collisions, so I couldn't rule it out from the data I had.
-        <br/><br/>
-        So I ran the same sweep with the posts removed and everything else identical. Five of nine echo-on runs still failed the same way, with comparable odometry error and false arrivals 0.72–1.76 m short. The posts weren't the cause.
+        <table style="width:100%; max-width:600px; border-collapse:collapse; font-size:0.9em;">
+            <tr style="border-bottom:1px solid #555;">
+                <th style="text-align:left; padding:6px;">Fog echoes on, 100 m – 10 m visibility</th>
+                <th style="text-align:left; padding:6px;">Before</th>
+                <th style="text-align:left; padding:6px;">After</th>
+            </tr>
+            <tr><td style="padding:6px;">Runs reaching the goal</td><td style="padding:6px;">3 of 18</td><td style="padding:6px;">18 of 18</td></tr>
+            <tr><td style="padding:6px;">False arrivals</td><td style="padding:6px;">8</td><td style="padding:6px;">0</td></tr>
+            <tr><td style="padding:6px;">Odometry error at the end</td><td style="padding:6px;">0.17 – 1.78 m</td><td style="padding:6px;">0.00 – 0.18 m</td></tr>
+        </table>
+    </div>
+
+    <div class="paragraph center">
+        <video controls muted loop playsinline width="100%" style="max-width:800px; border-radius:6px;">
+            <source src="/img/projects/robodrive/fog-fix.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
     </div>
 
     <div class="paragraph">
-        <strong>Why I think my own result is overstated.</strong> The mechanism is real, but my model exaggerates it. Wheels reach commanded speed instantly with unlimited torque, and encoders read commanded rather than actual rotation — so simulated slip converts to false odometry far more efficiently than it would on hardware with real motor spin-up time. The fog echo fraction (0.1) is assumed rather than measured, and real lidars vary. Three runs per sweep gives a pattern, not a precise pass rate. And real fog has spatial structure this model lacks.
+        It has limits, and they're documented: at 5 m visibility the robot still gets through but slowly, and the filter assumes a still world, so anything moving faster than about 1.5 m/s would be filtered out too. The slalom in fog is now a regression test in CI.
         <br/><br/>
-        The finding I'd stand behind is the shape, not the numbers: <strong>a sensor degradation produced a localisation failure, through a path that doesn't exist in the physics.</strong> That's the kind of coupling you only find by instrumenting and sweeping, and exactly the kind that would be expensive to discover on real hardware.
+        The finding I'd stand behind is the shape, not the numbers: <strong>a sensor degradation produced a localisation failure, through a path that doesn't exist in the physics.</strong> That's the kind of coupling you only find by instrumenting and sweeping — and exactly the kind that's expensive to discover on real hardware.
+    </div>
+
+    <h2>ROS 2 Bridge</h2>
+
+    <div class="paragraph">
+        The bridge is just another client of the external API, so the simulation still knows nothing about ROS. It publishes <code>/clock</code>, <code>/scan</code>, <code>/odom</code>, <code>/imu</code> and the transforms between them, all in simulation time, and forwards <code>/cmd_vel</code> as drive commands. A command only counts while it's fresh, so a ROS node that stops publishing stops the robot.
         <br/><br/>
-        <em>Full analysis: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/fog.md" target="_blank">fog.md</a> · The fog model itself — Koschmieder's law and the lidar range equation, each derived in its comment: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/Source/RoboSim/Public/RoboFog.h" target="_blank">RoboFog.h</a> · The clear-heading search, including why "no return" is treated as clear: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/Source/RoboAutonomy/Private/RoboAvoidance.cpp" target="_blank">RoboAvoidance.cpp</a></em>
+        Ground truth is published only on request, on its own topic, for RViz to draw beside odometry — the gap between the two is the drift. Nothing that drives the robot is allowed to read it, for the same reason as everywhere else in the project.
+    </div>
+
+    <div class="paragraph center">
+        <img src="/img/projects/robodrive/ros2-rviz.jpg" alt="The operator view and RViz side by side: the robot driven by an external ROS node, with odometry, true pose and lidar returns shown in RViz" style="width:100%; max-width:800px; border-radius:6px;" />
+    </div>
+
+    <div class="paragraph">
+        <em>Topics, setup and design: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/ros2.md" target="_blank">ros2.md</a> · <a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/decisions/0017-ros2-bridge-as-an-api-client.md" target="_blank">ADR 0017</a></em>
     </div>
 
     <h2>Built to Be Tested</h2>
 
     <div class="paragraph">
-        Testability drove the architecture rather than being retrofitted:
         <ul>
-            <li><strong>Pure functions with time passed in</strong> — the arbiter, clock and brains take the current simulation time as a parameter, so they can be unit tested without an engine running</li>
-            <li><strong>103 unit tests</strong> over the maths, models and coordinate conversions</li>
-            <li><strong>Scenarios as data</strong> — JSON files defining start pose, obstacles, goal and time limit, judged against ground truth</li>
-            <li><strong>Fixed time step, headless</strong> — about 12× real time, with the same results as real time, reproducible to within centimetres</li>
-            <li><strong>CI on every push</strong> — unit and scenario tests on a self-hosted runner</li>
-            <li><strong>Strict known-failure markers</strong> — a scenario marked as a known failure fails the run <em>when it starts passing</em>, so a capability can't arrive silently</li>
+            <li><strong>Time is passed in.</strong> The arbiter, clock and brains take the current simulation time as a parameter, so over 100 unit tests run without an engine.</li>
+            <li><strong>Scenarios are data</strong> — JSON files of start pose, obstacles, goal and time limit, judged against ground truth. A third party can run the whole suite from Python without owning Unreal (<a href="https://github.com/JoelAbe/RoboDrive/blob/main/Tools/Analysis/run_scenarios.py" target="_blank">run_scenarios.py</a>).</li>
+            <li><strong>Headless on a fixed time step</strong>, about 12× real time, reproducible to within centimetres, on every push in CI.</li>
+            <li><strong>Known failures fail when they start passing.</strong> When avoidance landed, the harness reported XPASS on the slalom and refused to pass until I removed the marker, so a capability can't arrive unnoticed.</li>
         </ul>
-        That last one matters more than it sounds. The slalom was a known failure in Phase 3; when obstacle avoidance landed in Phase 4, the harness reported XPASS and refused to pass until I removed the marker. The same check runs in CI on every push.
+        Before publishing, I had the codebase reviewed. It found the IMU's accelerometer reading almost nothing, and a test runner that could report a crashed run as green. Both are fixed. The second is the one I'd point to: a test suite that can lie about a crash is exactly the failure this whole project is about.
     </div>
+
+    <h2>Operator View</h2>
 
     <div class="paragraph">
-        The external API makes the whole thing testable from outside Unreal entirely — a TCP server speaking newline-delimited JSON, so a Python client can load scenarios, send commands, step time, and read sensors and ground truth. <code>run_scenarios.py</code> is the proof: a third party can run the full regression suite without owning the engine.
+        Live telemetry, estimated pose against ground truth, a top-down lidar view, Auto and Manual modes, click-to-set goals and runtime tuning. Someone who had never seen the project completed every task in it unaided.
         <br/><br/>
-        <em>API reference: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/docs/api.md" target="_blank">api.md</a> · <a href="https://github.com/JoelAbe/RoboDrive/blob/main/Tools/Analysis/run_scenarios.py" target="_blank">run_scenarios.py</a></em>
+        Two control decisions I'd defend: the emergency stop is a <em>latch</em> that no newer command can override (a unit test named <code>StopDoesNotExpire</code> exists only to keep that true), and Manual is a <em>gate</em>, so letting go of the controls stops the robot instead of handing it back to the brain. <em>(<a href="https://github.com/JoelAbe/RoboDrive/blob/main/Source/RoboSim/Private/RoboDriveArbiter.cpp" target="_blank">RoboDriveArbiter.cpp</a>)</em>
+        <br/><br/>
+        The lidar view deliberately draws fog echoes as obstacles instead of hiding them, because to the brain that's what they are. A display that quietly cleaned them up would be lying about the system it's meant to explain.
     </div>
 
-    <div class="paragraph">
-        <strong>The review before publishing.</strong> Before putting this in front of anyone, I had the codebase reviewed. It found two real bugs. The IMU's accelerometer read almost nothing, because velocity was being differenced at a higher rate than physics updated it — so most samples saw zero change. And the test runner could report a crashed run as green.
-        <br/><br/>
-        Both are fixed, and the runner now checks that a run actually completed. The second one is the bug I'd point to: a test suite that can lie about a crash is precisely the kind of failure this whole project is about. A result is only as trustworthy as the thing reporting it.
-    </div>
-
-    <h2>Control Arbitration &amp; The Operator View</h2>
-
-    <div class="paragraph">
-        Drive commands arrive from multiple sources — manual input, in-engine autonomy, the external API — and something has to decide which one wins. The arbiter resolves by <strong>priority and freshness</strong>: manual input overrides everything, and a watchdog stops the vehicle if the active source goes quiet. Emergency stop is a <em>latch</em>, not a mode: it doesn't expire, and it can't be overridden by a newer command. There's a unit test named <code>StopDoesNotExpire</code> whose entire job is to keep that true.
-        <br/><br/>
-        Manual is a <em>gate</em>, not just a higher priority. Letting go of the controls in Manual stops the robot rather than handing it back to the brain — control returns to autonomy only when the operator deliberately switches modes. An operator who releases the stick should never be surprised by the robot driving off.
-        <br/><br/>
-        <em>The safety logic in about 40 lines: <a href="https://github.com/JoelAbe/RoboDrive/blob/main/Source/RoboSim/Private/RoboDriveArbiter.cpp" target="_blank">RoboDriveArbiter.cpp</a> · <a href="https://github.com/JoelAbe/RoboDrive/blob/main/Source/RoboSim/Private/Tests/RoboDriveArbiterTest.cpp" target="_blank">its tests</a></em>
-        <br/><br/>
-        The operator view (Slate, fed by a telemetry snapshot) shows what the robot is doing and why: live sensor readouts, estimated pose against ground truth, a top-down lidar view, Auto/Manual switching, click-to-set goals, and runtime-tunable brain, avoidance and weather parameters.
-        <br/><br/>
-        The lidar view deliberately renders fog echoes as obstacles rather than filtering them out — because to the brain, that's what they are. An operator display that quietly cleaned them up would be lying about the system it's meant to explain.
-    </div>
-
-    <h2>What Isn't Done</h2>
+    <h2>What's Left</h2>
 
     <div class="paragraph">
         <ul>
-            <li><strong>The ROS 2 bridge</strong> — Phase 6, not started. A Dockerised adapter acting as another API client, publishing sensor topics and <code>/clock</code>, subscribing to <code>/cmd_vel</code>, viewable in RViz. The architecture is already shaped for it; the work isn't done.</li>
-            <li><strong>The clutter filter</strong> that would actually fix fog avoidance — the diagnosis is complete, the remedy isn't built</li>
-            <li><strong>Collision detection in scenarios</strong> — which is why the fog control experiment was necessary rather than optional</li>
-            <li><strong>Lockstep API</strong> — stepping is not fully synchronous with clients</li>
-            <li><strong>Motor dynamics</strong> — wheels reach commanded speed instantly, which is the main reason the fog odometry result is exaggerated</li>
-            <li><strong>Phase 5's acceptance test</strong> — someone unfamiliar with the project operating it unaided. Built but not yet validated.</li>
+            <li><strong>The ROS 2 bridge has only run on Windows</strong>, natively, and its tests aren't in CI. Most robotics teams run Ubuntu, where it hasn't been tried.</li>
+            <li><strong>The ROS goal driver stops for obstacles rather than avoiding them.</strong> Avoidance over ROS would come from Nav2.</li>
+            <li><strong>Wheels reach commanded speed instantly</strong> and the encoders count commanded rotation, so slip — and the fog odometry result — is likely overstated.</li>
+            <li><strong>Scenarios don't detect collisions</strong>, and the API isn't lockstep.</li>
         </ul>
-    </div>
-
-    <h2>Why This Project Matters</h2>
-
-    <div class="paragraph">
-        It's the project where I stopped treating simulation as "a game engine pointed at a different problem" and started treating it as its own discipline — with its own failure modes, its own notion of what a trustworthy result is, and its own reasons for architectural decisions that would look like overkill in a game.
-        <br/><br/>
-        The parts I'd defend in a review aren't the features. They're the decisions: keeping ground truth away from the brain, enforcing the module boundary in the build rather than by convention, making scenarios data so a third party can run them without the engine, and treating a surprising measurement as something to investigate rather than something to tune away.
     </div>
     `, "#2d7d9a", false, true, "Unreal Engine 5"),
 
