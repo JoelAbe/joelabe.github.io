@@ -101,8 +101,8 @@ h1.dialog-title {
 
 .dialog-content {
   padding: 20px;
-  background-color: #fcfcfc;
-  color: #696969;
+  background-color: #38383d;
+  color: #dadada;
   font-size: 1em;
   line-height: 1.5em;
   border-radius: 0 0 8px 8px;
