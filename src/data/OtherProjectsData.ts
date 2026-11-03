@@ -108,7 +108,7 @@ export default [
     </div>
     `, "#a67c00", "UE5"),
 
-    new ProjectData("pyro-purge", "Pyro Purge", "img/projects/pyro-purge/icon.png", `
+    new ProjectData("pyro-purge", "Pyro Purge", "img/projects/pyro-purge/icon.gif", `
     <div class="paragraph">
         <div class="notice">You can play the game here: <a href="https://joelabe.itch.io/pyro-purge" target="_blank">joelabe.itch.io/pyro-purge</a></div>
     </div>
