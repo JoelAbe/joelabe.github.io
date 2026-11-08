@@ -7,95 +7,123 @@ export default [
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Engine:</strong> Unity 6 &nbsp;·&nbsp; <strong>Client:</strong> Enchanted Arcade &nbsp;·&nbsp; <strong>Platform:</strong> PC (Steam)
+        <strong>Engine:</strong> Unity 6 &nbsp;·&nbsp; <strong>Client:</strong> Enchanted Arcade &nbsp;·&nbsp; <strong>Platform:</strong> PC (Steam), Steam Deck
     </div>
 
-    <h2>Project Overview</h2>
+    <div class="tags"><span>C#</span><span>HDRP</span><span>FMOD</span><span>ImGui</span><span>ScriptableObjects</span><span>Profiling</span></div>
 
     <div class="paragraph">
-        Cascadier is a roguelike coin pusher built in Unity 6 by Enchanted Arcade. I joined four months before launch — about 1.5 years into the project's lifecycle — picking up the codebase from one of the founding engineers who had moved on.
-        <br/><br/>
-        My remit was end-to-end: drive performance up to shippable, refactor the systems that would carry the most new content, design and build a brand-new roguelike progression mechanic, and partner with design on the rapid iteration sprints leading up to Early Access. By launch I had taken ownership of the coin physics, the ticket/trinket upgrade pipeline, the FirstCoin progression system, audio integration, and the bulk of the gameplay-side bug fix queue.
+        <strong>A roguelike coin pusher on Steam. I joined 1.5 years into development and four months before launch, took over the coin physics, performance and core progression systems, and came back after launch for Early Access.</strong>
     </div>
 
     <div class="paragraph center">
-        <video controls width="100%" style="max-width:800px;">
+        <video controls width="100%" style="max-width:800px; border-radius:6px;">
             <source src="/img/projects/cascadier/gameplay.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
     </div>
 
-    <h2>Scope &amp; Ownership</h2>
+    <h2>At a Glance</h2>
     <div class="paragraph">
         <ul>
-            <li><strong>Performance</strong> — drove in-editor FPS from ~15 to a stable 60 through physics rearchitecture, replacing a bespoke supervisory layer with native Unity physics, and cross-team work with the art team to bring down rendering cost on high-instance models</li>
-            <li><strong>FirstCoin</strong> — designed and built a complete roguelike progression mechanic from scratch: a 23-effect level tree spanning ~40 levels, ScriptableObject data layer, UI integration, and an absorption mechanic that lets the FirstCoin carry a player-selected ability into the round</li>
-            <li><strong>Trinket upgrade system</strong> — reworked the upgrade pipeline into a modular, multi-pathway tier graph driven entirely by ScriptableObjects and a generic-field dispatcher, so new upgrades become a designer authoring task rather than a code change</li>
-            <li><strong>Ticket abilities</strong> — implemented 11 ticket abilities spanning kinematic structure generation, procedural motion math, and physics-driven impacts — each its own self-contained mechanic</li>
-            <li><strong>Rapid prototyping sprint</strong> — week-long collaboration with the design team building throwaway test scenes and mechanics with live feedback to lock the core game loop</li>
-            <li><strong>FMOD integration</strong> — wired in banks, events and parameters across gameplay states for responsive audio feedback</li>
-            <li><strong>Quest system</strong> — cleaned up the pre-existing quest flow and added new quest content</li>
-            <li><strong>Bug fixes</strong> — shipped hundreds of bug fixes and architectural corrections in the final push to Early Access</li>
+            <li><strong>~15 → 60 FPS</strong> before launch, mostly by <em>removing</em> a custom physics layer that was fighting Unity's own solver</li>
+            <li><strong>Perf Lab</strong>, an automated performance test that plays the game by itself, on testers' PCs and the Steam Deck</li>
+            <li><strong>FirstCoin</strong>, a progression system I designed and built from scratch: 23 effects across ~40 levels</li>
+            <li><strong>A trinket upgrade system</strong> designers extend without touching code, and <strong>11 ticket abilities</strong></li>
+            <li><strong>Controller and Steam Deck support</strong>, a rebuilt options menu with rebinding and accessibility settings</li>
         </ul>
     </div>
 
-    <h2>Performance: ~15 → 60 FPS</h2>
+    <h2>The Physics Was Fighting Itself</h2>
     <div class="paragraph">
-        In a coin pusher, the coin physics <em>is</em> the game. With the in-editor framerate sitting at around 15 and dipping lower under load, there was no separating "fix the performance" from "make the game feel good" — they were the same problem. Stable 60 was the bar to clear before any other gameplay polish was worth doing, and the moment the coin sim started running at the right framerate is the moment the game started feeling like a coin pusher.
+        In a coin pusher, the coin physics <em>is</em> the game, and when I joined it ran at about 15 FPS in the editor. There was no separating "fix the performance" from "make it feel good". They were the same problem.
         <br/><br/>
-        The single largest gain came from removing the custom coin physics supervisory layer that was fighting Unity's native solver. Solver iteration counts had been inflated to compensate for the friction between the two systems — bringing them back to Unity defaults unlocked most of the framerate budget.
+        The main cost was a supervisory layer on top of Unity's solver: per-frame upward boxcasts to detect stuck stacks, pairwise <code>Physics.IgnoreCollision</code> calls across overlapping coins (growing with the square of the coin count), a coroutine that briefly ghosted collisions between every overlapping pair, and material and damping swaps in <code>FixedUpdate</code>. Solver iterations had been raised to compensate. <strong>It had been built to hide jitter and "coin explosions", not to fix them.</strong>
         <br/><br/>
-        Profiling flagged the next chunk as rendering-bound on the coin machines themselves, the environment models, and the lighting and detail props duplicated many times in each scene. I traced the worst offenders, then worked with the art team to bring vertex and poly budgets down — the kind of fix that only lands when engineering and art look at the profiler together.
-        <br/><br/>
-        A lot of the rest was smoke and mirrors. I swapped mesh colliders for box colliders wherever the silhouette could lie about it — coin machines, decorative shelves, anything the player wasn't directly interacting with — and dropped colliders entirely on props that existed for the eye, not the physics. The game looked the same; the system stopped paying for fidelity it never used.
-        <br/><br/>
-        Other interventions:
+        I replaced the whole layer with three targeted mechanisms:
         <ul>
-            <li><strong>Capped <code>RB.maxDepenetrationVelocity</code> at 4</strong> on every coin Rigidbody — eliminated the "coin explosion" bug where deep interpenetration generated runaway separation forces, occasionally launching coins through the playfield</li>
-            <li><strong>Investigated occlusion culling, then rejected it</strong> — the camera is a fixed wide-angle shot of the full machine; almost nothing is ever fully occluded, so baking cost and per-frame culling overhead would exceed any savings</li>
+            <li><code>maxDepenetrationVelocity</code> capped at 4 on every coin, so deeply overlapping coins separate gently instead of launching through the playfield</li>
+            <li>One upward-velocity check while a coin is on a shelf, with an override for abilities that need to throw coins</li>
+            <li>A per-coin gravity multiplier for settling, tunable per coin type</li>
         </ul>
-        A lot of work also went into giving each coin the right physics material for the moment it was in. <code>ReducedFrictionMaterial</code> was applied when two coins wedged on the pegboard so they could slide off naturally instead of locking up. Near the end of a shelf, the same swap let coins get pushed off the edge rather than mass-piling into what was effectively an immovable wall. Coins moved between <code>MainMaterial</code>, <code>ReducedFrictionMaterial</code>, <code>PegFrictionMaterial</code>, and <code>BouncyMaterial</code> when the situation called for it, not on a fixed schedule.
-        <br/><br/>
-        The result was both a framerate win and a capacity win — the system went from struggling under 100 active coins to running hundreds simultaneously without lag.
-    </div>
-
-    <h2>Custom Physics → Unity Native</h2>
-    <div class="paragraph">
-        The original coin physics ran a heavy supervisory layer on top of Unity's solver: per-frame upward boxcasts to detect stuck stacks, pairwise <code>Physics.IgnoreCollision</code> calls across all overlapping coins (O(n²) in the coin count), a coroutine that briefly ghosted collision between every pair of overlapping coins, per-state material and damping switches in <code>FixedUpdate</code>, and custom shelf-stack force application. It had been built to mask jitter and explosions that early-Unity coin-pusher projects tend to hit — patching symptoms rather than the root cause.
-        <br/><br/>
-        I replaced the entire layer with three targeted mechanisms:
-        <ul>
-            <li><code>RB.maxDepenetrationVelocity = 4f</code> set at Rigidbody creation</li>
-            <li>A single upward-velocity suppression check while on-shelf, gated by an override flag for ability effects</li>
-            <li>A per-coin <code>ExtraGravityMultiplier</code> for settling behaviour, tunable per coin type</li>
-        </ul>
-        The coin explosion bug, the jitter on large piles, and the stack-riding behaviour all disappeared. <code>CoinMono.FixedUpdate</code> went from a dozen branches with nested conditionals down to four clean responsibilities. The team adopted it quickly because the result felt better, not just faster.
+        The explosions, the jitter on large piles and coins riding on top of stacks all went away. <code>CoinMono.FixedUpdate</code> went from a dozen nested branches to four clear responsibilities, and the team adopted it quickly because the game felt better, not just faster.
     </div>
 
     <div class="paragraph center">
-        <video controls width="100%" style="max-width:800px;">
+        <video controls muted loop playsinline width="100%" style="max-width:800px; border-radius:6px;">
             <source src="/img/projects/cascadier/coins-montage.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
     </div>
 
-    <h2>FirstCoin — A New Progression Mechanic</h2>
     <div class="paragraph">
-        FirstCoin was a from-scratch design: a unique coin the player keeps across runs, gains XP as you collect it, and levels up to unlock effects in four hook categories — <em>passive</em>, <em>on insertion</em>, <em>on collection</em>, and <em>on round end</em>. By max level it can trigger ability cascades, absorb a player-chosen ticket card to carry into the round, and convert touched coins to higher-value tiers.
+        The rest of the framerate came from places the player never looks:
+        <ul>
+            <li><strong>Reading the profiler with the art team.</strong> The machines, environment and props repeated across each scene were vertex-heavy, so we cut budgets together.</li>
+            <li><strong>Box colliders wherever the silhouette could lie.</strong> Machines and decorative shelves didn't need mesh colliders, and props that exist only for the eye got none.</li>
+            <li><strong>The right physics material for the moment.</strong> Coins switch between normal, reduced-friction, peg and bouncy materials by situation, so two coins wedged on the pegboard slide free, and coins at a shelf edge get pushed off instead of piling into a wall.</li>
+            <li><strong>Occlusion culling, tried and dropped.</strong> The camera is a fixed wide shot of the whole machine, so almost nothing is ever hidden and the overhead would cost more than it saved.</li>
+        </ul>
+        The game went from struggling under 100 active coins to running hundreds without lag.
+    </div>
+
+    <h2>Early Access: Measure, Don't Guess</h2>
+    <div class="paragraph">
+        The launch work was found by profiling by hand, which is fine for the obvious problems. Early Access brought more machines, more abilities and a Steam Deck target, and I wanted to know what each change actually cost on hardware I didn't own. So I built <strong>Perf Lab</strong>:
+        <ul>
+            <li>It plays the game by itself through real input, so it runs the same code paths a player does</li>
+            <li>It loads the machine with more and more coins, then triggers Euphoria and every ability</li>
+            <li>It reports frame, GPU and physics timings, and the worst hitches</li>
+            <li>A <em>strip sweep</em> turns systems off one at a time to find the most expensive one</li>
+            <li>Testers run it on their own PCs and on the Steam Deck, so results compare across devices</li>
+        </ul>
+        The biggest single win it pointed to was the coin collider. Each coin used a 100-vertex mesh collider. A 12-sided prism looks identical in play.
+    </div>
+
+    <div class="paragraph">
+        <table style="width:100%; max-width:600px; border-collapse:collapse; font-size:0.9em;">
+            <tr style="border-bottom:1px solid #555;">
+                <th style="text-align:left; padding:6px;">Coin collider (editor)</th>
+                <th style="text-align:left; padding:6px;">100-vertex mesh</th>
+                <th style="text-align:left; padding:6px;">12-sided prism</th>
+            </tr>
+            <tr><td style="padding:6px;">Frame time at 800–1,000 coins</td><td style="padding:6px;">36 / 69 ms</td><td style="padding:6px;">19 / 28 ms</td></tr>
+            <tr><td style="padding:6px;">Coins before 60 FPS drops</td><td style="padding:6px;">~600</td><td style="padding:6px;">~750</td></tr>
+        </table>
+    </div>
+
+    <div class="paragraph">
+        <details>
+            <summary>The long tail of smaller fixes</summary>
+            <ul>
+                <li>A coin pool instead of spawning and destroying coins</li>
+                <li>Machines loaded on demand, with assets prewarmed and shader states precompiled to remove hitches during play</li>
+                <li>An upgrade from Unity 6.0 to 6.3, an HDRP-only project (removing an unused URP pipeline), with GPU instancing, the GPU Resident Drawer and render scaling turned on</li>
+                <li>LINQ and repeated <code>GetComponent</code>/null-check patterns removed from hot ability code, and tweens that depended on frame rate fixed</li>
+                <li>The dev menu rebuilt on ImGui as a tabbed window (live stats, options, save data, audio stats), with a rendering debugger, an anti-aliasing comparison and a settings benchmark, so settings could be tested live instead of through rebuilds</li>
+            </ul>
+        </details>
+    </div>
+
+    <h2>FirstCoin: A Progression System From Scratch</h2>
+    <div class="paragraph">
+        A coin the player keeps across runs. It gains XP when collected and levels up through about 40 levels, unlocking 23 effects across four hooks: <em>passive</em>, <em>on insertion</em>, <em>on collection</em> and <em>on round end</em>. At higher levels it triggers ability cascades, converts the coins it touches to higher tiers, and can absorb a player-chosen ability card to carry into the round.
     </div>
 
     <div class="paragraph center">
-        <video controls width="100%" style="max-width:800px;">
+        <video controls muted loop playsinline width="100%" style="max-width:800px; border-radius:6px;">
             <source src="/img/projects/cascadier/first-coin.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
     </div>
 
     <div class="paragraph">
-        The data layer is a single ScriptableObject (<code>FirstCoinScr</code>) holding all configuration and persisted state, plus an ordered <code>List&lt;LevelData&gt;</code> describing each level's progression cost, reward visuals, and one of 23 named effect types. Designers tune the entire progression tree from the inspector — no code per level.
+        The whole tree is one ScriptableObject holding an ordered list of level data: cost, reward visuals and one of 23 effect types per level. A single accumulator function resets every derived stat and rebuilds it from that list. Effects follow one of three shapes: they <em>stack</em> across levels, set a <em>flag</em> once, or keep the <em>highest tier</em> reached.
         <br/><br/>
-        The architecturally characteristic piece is <code>CalculateLevelStats()</code>, the central accumulator that resets all derived state and rebuilds it from the level data on demand. Three different accumulation strategies — stack, flag, and "highest wins" — all coexist within one switch:
-        <pre style="background:#222;color:#eee;padding:14px;border-radius:6px;overflow-x:auto;font-size:0.85em;line-height:1.4;"><code>public void CalculateLevelStats()
+        <strong>No effect owns its own state, so a balance change is a data edit and a new effect is one row plus one switch arm.</strong> Designers tuned the entire tree from the inspector through the final months, without me in the loop.
+        <details>
+            <summary>Show the accumulator</summary>
+            <pre style="background:#222;color:#eee;padding:14px;border-radius:6px;overflow-x:auto;font-size:0.85em;line-height:1.4;"><code>public void CalculateLevelStats()
 {
     // Reset all derived state to defaults
     scoreBonus = 0; ticketsOnRecovery = 0; storeDiscount = 0;
@@ -133,21 +161,19 @@ export default [
         }
     }
 }</code></pre>
-        Adding a new level effect becomes a one-row data entry plus a single switch arm. The pattern scaled cleanly to all 23 named effects without ever needing a subclass.
+        </details>
     </div>
 
-    <h2>Trinket Upgrade System</h2>
+    <h2>Trinket Upgrades: Data, Not Code</h2>
     <div class="paragraph">
-        The pre-existing upgrade data lived on the trinket prefabs themselves, with upgrade nodes pointing at other upgrade nodes through nested reference fields — cyclic by construction, and every new upgrade meant editing a deeply nested inspector tree. I pulled the upgrade data out into ScriptableObjects with explicit prerequisite edges forming a DAG, then reworked the runtime side: every trinket exposes 8 generic floats (<code>FirstFloat</code>–<code>EighthFloat</code>) and 4 generic bools, each upgrade node carries an <code>UpgradeOptions</code> enum naming which generic field it modifies, and a single dispatcher routes a delta-based stat change at runtime.
-    </div>
-
-    <div class="paragraph center">
-        <img src="/img/projects/cascadier/trinket-inspector.png" alt="Trinket ScriptableObject inspector" style="width:100%; max-width:800px; margin:15px 0; border-radius:6px;" />
-    </div>
-
-    <div class="paragraph">
-        The dispatcher is idempotent — it computes <code>(targetValue − previousValue)</code> and applies the delta, so the same upgrade can be re-applied without double-counting:
-        <pre style="background:#222;color:#eee;padding:14px;border-radius:6px;overflow-x:auto;font-size:0.85em;line-height:1.4;"><code>public void SetTrinketUpgrades(ShopItemMono triggeredPurchase)
+        Upgrade data used to live on the trinket prefabs, with upgrade nodes pointing at each other through nested references, cyclic by construction. Every new upgrade meant editing a deep inspector tree, and usually code.
+        <br/><br/>
+        I moved it into ScriptableObjects with explicit prerequisite links, laid out on a four-ring upgrade tree. At runtime each trinket exposes a fixed set of generic fields, each upgrade names which field it changes, and one dispatcher applies it. <strong>Adding an upgrade became a designer task.</strong>
+        <br/><br/>
+        The dispatcher's key property came from a bug: re-applying an upgrade counted it twice. I reframed it around <em>what changed since last time</em> instead of <em>the current value</em>, so it applies only the difference and is safe to call any number of times. That removed a whole class of double-counting bugs at once.
+        <details>
+            <summary>Show the dispatcher and the inspector</summary>
+            <pre style="background:#222;color:#eee;padding:14px;border-radius:6px;overflow-x:auto;font-size:0.85em;line-height:1.4;"><code>public void SetTrinketUpgrades(ShopItemMono triggeredPurchase)
 {
     if (TiedShopStats?.TrinketUpgrades == null) return;
 
@@ -174,20 +200,23 @@ export default [
             case UpgradeOptions.FirstBool:     FirstBool   = upgradeAmount &gt; 0; break;
             case UpgradeOptions.TriggerChance:
                 TicketPrecentageChance += upgradeAmount;                       break;
-            // ... 20 more dispatch cases reaching into globals where needed
+            // ... 20 more dispatch cases
         }
     }
     _currentTrinketLevels = new List&lt;int&gt;(TiedShopStats.TrinketUpgradeLevels);
 }</code></pre>
-        Upgrade nodes are positioned on a 4-ring radial graph (Inner / Middle / Outer / Beyond) with prerequisite DAG edges between them. Designers build new upgrade trees by creating ScriptableObjects and wiring them in the inspector.
+            <img src="/img/projects/cascadier/trinket-inspector.png" alt="Trinket upgrade ScriptableObject in the inspector" style="width:100%; max-width:800px; margin-top:10px; border-radius:6px;" />
+        </details>
     </div>
 
-    <h2>Ability Feature Highlight: Cyclone</h2>
+    <h2>Ticket Abilities</h2>
     <div class="paragraph">
-        Of the 11 ticket abilities I built, Cyclone is the one I'd put on a code review. It catches nearby coins into a tornado around the FirstCoin, lifts them on a dual-phase arc, and on completion releases them back into physics with correct tangential exit velocity — so they fly outward naturally instead of dropping straight down.
+        I built eleven, from physics impulses to procedural motion, each a self-contained mechanic. The one I'd put up for code review is <strong>Cyclone</strong>: it lifts nearby coins into a tornado around the FirstCoin on a sine-then-cosine arc, speeds them up near the peak, and adds per-coin wind so they swirl instead of turning like a carousel.
         <br/><br/>
-        The arc uses a sine ramp up to peak height and a cosine ramp down. Angular speed scales with height. Per-coin wind noise breaks lockstep so the orbiting coins look like a swirl, not a rigid carousel:
-        <pre style="background:#222;color:#eee;padding:14px;border-radius:6px;overflow-x:auto;font-size:0.85em;line-height:1.4;"><code>private void Cyclone_UpdateArc(CycloneCoin vc, float elapsed,
+        The part that matters is the release. When the arc ends, each coin goes back to physics with the tangential velocity of its orbit, so it flings outward like it left a spinning disc. Without that, coins drop straight down: visually wrong, and they don't scatter back onto the playfield.
+        <details>
+            <summary>Show the Cyclone arc</summary>
+            <pre style="background:#222;color:#eee;padding:14px;border-radius:6px;overflow-x:auto;font-size:0.85em;line-height:1.4;"><code>private void Cyclone_UpdateArc(CycloneCoin vc, float elapsed,
     float liftTime, float descentTime, Vector3 axis)
 {
     float flightDuration = liftTime + descentTime;
@@ -232,42 +261,44 @@ export default [
           + Vector3.up * 1.5f;
     }
 }</code></pre>
-        The tangential exit velocity is the part I'm proudest of. Without it, coins would drop straight down at the end of the arc — visually wrong and gameplay-wrong, because they wouldn't scatter back onto the playfield naturally. Computing the tangent from the orbital angle and applying it as the release velocity makes the coins look like they're being flung off a spinning disc.
+        </details>
+        <details>
+            <summary>The other ten, one line each</summary>
+            <ul>
+                <li><strong>Ragnarok</strong>: periodic impulses on every coin, retriggering when a gem is collected</li>
+                <li><strong>Geode</strong>: wakes dormant shelf objects that shatter into gems after enough hits</li>
+                <li><strong>Dynamite</strong>: a ballistic throw to a safe landing spot, a fuse, then a radial blast and bonus coins</li>
+                <li><strong>Pillary</strong>: stacks coins into a spiralling column on the FirstCoin, then releases them all at once</li>
+                <li><strong>Lightning Strike</strong>: a delayed bolt that scatters coins outward on impact</li>
+                <li><strong>Disco Ball</strong>: arranges coins on a Fibonacci sphere, spins it, then lets go</li>
+                <li><strong>Pyramid</strong>: builds a square coin pyramid from the top down, then releases it as physics objects</li>
+                <li><strong>Sea of Sand</strong>: a steady forward push on every shelf coin, with new coins flowing in from the back</li>
+                <li><strong>Spindervish</strong>: pins a stationary coin, spins it up and throws nearby coins outward</li>
+                <li><strong>Blade of Gales</strong>: a sustained up-and-forward gust near the collection zone, tracking where coins land</li>
+            </ul>
+        </details>
     </div>
 
+    <h2>Early Access: Controller, Steam Deck &amp; Options</h2>
     <div class="paragraph">
-        <strong>The other 10 abilities, one line each:</strong>
         <ul>
-            <li><strong>Ragnarok</strong> — periodic impulse forces on every coin for a configurable duration, with chain-retrigger on gem collection</li>
-            <li><strong>Geode</strong> — activates dormant shelf objects that shatter into gems after configurable hit counts</li>
-            <li><strong>Dynamite</strong> — physics-driven ballistic arc to a random safe landing zone, fuse burn, then radial blast and bonus coin spawn</li>
-            <li><strong>Pillary</strong> — stacks coins kinematically in a spiraling column anchored to the FirstCoin, releases all simultaneously</li>
-            <li><strong>Lightning Strike</strong> — delayed VFX bolt with radial coin scatter and bonus coin fling on impact</li>
-            <li><strong>Disco Ball</strong> — Fibonacci-sphere arrangement around a center coin, rotating root transform, then unparent and scatter</li>
-            <li><strong>Pyramid</strong> — builds a square-base coin pyramid from apex downward, releases as physics objects at once</li>
-            <li><strong>Sea of Sand</strong> — sustained forward force on all shelf coins, with periodic new coin spawns flowing in from the back</li>
-            <li><strong>Spindervish</strong> — when the carrier coin is stationary, mass-pins it, spins up, applies centrifugal forces to nearby coins, winds down</li>
-            <li><strong>Blade of Gales</strong> — sustained upward+forward force near the collection zone via OverlapBox, tracks launched coins and monitors landings</li>
+            <li><strong>Controller support</strong> with automatic device detection: the cursor hides when a controller is in use, and every screen keeps a sensible selection, from the upgrade tree to the menus</li>
+            <li><strong>Button prompts per device</strong>, including hold-to-press, plus full rebinding for keyboard, mouse and controller</li>
+            <li><strong>Steam Deck</strong>: the game detects the device and applies platform defaults, including a 30 FPS cap, with fixes for Deck-only bugs like a double pause and unreadable text</li>
+            <li><strong>Options rebuilt</strong> into Display, Graphics, Audio, Gameplay and Controls tabs, with an unapplied-changes prompt, monitor selection, aspect-ratio lock and render scaling</li>
+            <li><strong>Accessibility</strong>: reduced screen shake, score popups off, and muting when the game is in the background</li>
         </ul>
+        Alongside that, I reworked the round end into a shop, rebuilt the pause, Machine End and Game Over screens, added round and machine saves, reworked Euphoria, integrated most of the SFX and music in FMOD (including a pause track that takes over as the gameplay music fades out), and fixed a long list of stuck coins, including a component that rescues coins wedged in the pegboard.
     </div>
 
-    <h2>Challenges &amp; Learnings</h2>
+    <h2>What I'd Take to the Next Project</h2>
     <div class="paragraph">
         <ul>
-            <li>Joining a project late means the architecture is already pointed in a direction — picking which fights to take is more important than picking which fights you'd win in a clean room. The custom physics rewrite was worth it; replacing the global event bus would not have been</li>
-            <li>The biggest performance wins came from <em>removing</em> code, not adding it. The instinct to cache, batch, or instance was usually wrong — the supervisory layer was the cost. Deleting it and letting the code we kept cooperate with Unity's solver instead of fighting it was the win</li>
-            <li>Considered porting the coin physics to <strong>DOTS</strong> to offload the work to Burst-compiled jobs. At an earlier project stage it would have been the natural call — but four months from launch, the porting cost and the risk of late-stage instability outweighed the gain. Knowing when <em>not</em> to rewrite is its own skill</li>
-            <li>Designing the FirstCoin system around a single accumulator function (rather than per-effect state) made every later feature request — and every balance tweak — a designer-side authoring change, not a code change. That payoff compounded across the final months</li>
-            <li>The delta-based trinket upgrade dispatcher emerged from a bug: re-applying the same upgrade was double-counting stat changes. Reframing it around <em>change since last time</em> instead of <em>current value</em> made the function idempotent and killed an entire class of bugs at once</li>
-            <li>When working alongside a design team in rapid prototyping, the right deliverable is a tunable scene with knobs exposed in the inspector — not a polished feature. Test scenes I built in an hour generated more usable design feedback than features I shipped in a week</li>
+            <li><strong>The biggest performance win was deleting code.</strong> The instinct to cache, batch or instance was usually wrong here. The supervisory layer <em>was</em> the cost.</li>
+            <li><strong>Joining late means choosing your fights.</strong> Replacing the physics layer was worth it; replacing the global event bus wasn't. Porting the coins to DOTS made sense in principle, but not four months from launch.</li>
+            <li><strong>Build systems so designers don't need you.</strong> FirstCoin and the upgrade tree paid off every week of the final months, because balance changes never waited on code.</li>
+            <li><strong>Measure on hardware you don't have.</strong> Profiling by hand finds the obvious problems. Perf Lab let anyone on the team find out whether a fix actually helped.</li>
         </ul>
-    </div>
-
-    <h2>Why This Project Matters</h2>
-    <div class="paragraph">
-        Cascadier was my first time joining a mid-development codebase with a hard launch date and being trusted to make architectural calls. It was also my first Steam title, and the project where I learned what it actually takes to deliver a steady stream of new mechanics — entire abilities, a full progression system, the trinket rework — inside a tight production window without breaking the schedule or the team's confidence in the code.
-        <br/><br/>
-        The <strong>trinket upgrade system</strong> is the part I'm proudest of as an engineer. The modularity it gave designers compounded month after month: new upgrades became inspector authoring instead of code changes, and the architecture is the kind that would pay for itself again on the next game. The <strong>FirstCoin system</strong> is the part I'm proudest of as a designer-engineer: a mechanic the studio could ship, balance, and extend without me sitting at every step. The <strong>physics work</strong> is the part I'm proudest of as a craftsman: a system that did less, ran faster, and felt better — and that the rest of the team adopted because the result spoke for itself.
     </div>
     `, "#b8860b", "Unity 6"),
 
@@ -277,8 +308,10 @@ export default [
     </div>
 
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
-        <strong>Role:</strong> Solo, a little over a month &nbsp;·&nbsp; <strong>Stack:</strong> Unreal Engine 5.8, C++, Slate, Python, ROS 2, GitHub Actions &nbsp;·&nbsp; <strong>Domain:</strong> Robotics Simulation
+        <strong>Engine:</strong> Unreal Engine 5 &nbsp;·&nbsp; <strong>Type:</strong> Solo Project &nbsp;·&nbsp; <strong>Platform:</strong> PC
     </div>
+
+    <div class="tags"><span>C++</span><span>Chaos Physics</span><span>Slate</span><span>Python</span><span>ROS 2</span><span>GitHub Actions</span></div>
 
     <div class="paragraph">
         <strong>A UE5 robotics simulator in C++ with sensor models, an external API, a scenario test suite in CI, an operator view and a ROS 2 bridge. Its centrepiece is a measured investigation of how fog defeats lidar obstacle avoidance — and the fix that diagnosis led to.</strong>
@@ -446,6 +479,8 @@ export default [
         <strong>Engine:</strong> Unity &nbsp;·&nbsp; <strong>Clients:</strong> Reactional Music &amp; Amanotes &nbsp;·&nbsp; <strong>Platform:</strong> Mobile (Play Store, App Store)
     </div>
 
+    <div class="tags"><span>C#</span><span>Firebase</span><span>Remote Config</span><span>AppsFlyer</span><span>IronSource</span><span>JSON Saves</span></div>
+
     <h2>Context</h2>
 
     <div class="paragraph">
@@ -552,6 +587,8 @@ export default [
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
         <strong>Engine:</strong> Unreal Engine 5 &nbsp;·&nbsp; <strong>Type:</strong> Game Jam &nbsp;·&nbsp; <strong>Platform:</strong> PC
     </div>
+
+    <div class="tags"><span>C++</span><span>Blueprints</span><span>State Trees</span></div>
 
     <h2>Project Overview</h2>
 
@@ -691,6 +728,8 @@ export default [
         <strong>Engines:</strong> Unreal Engine 5 &amp; Unity &nbsp;·&nbsp; <strong>Clients:</strong> Reactional Music &amp; Unity China &nbsp;·&nbsp; <strong>Type:</strong> Simulation / HMI Prototype
     </div>
 
+    <div class="tags"><span>C#</span><span>Vehicle Physics</span><span>Unity Splines</span><span>Reactional SDK</span></div>
+
     <h2>Context</h2>
 
     <div class="paragraph">
@@ -770,6 +809,8 @@ export default [
     <div class="paragraph" style="opacity:0.75; font-size:0.95em;">
         <strong>Engines:</strong> Unity &amp; Unreal Engine 5 &nbsp;·&nbsp; <strong>Client:</strong> Reactional Music &nbsp;·&nbsp; <strong>Platform:</strong> PC, Mobile, VR
     </div>
+
+    <div class="tags"><span>C#</span><span>UI Toolkit</span><span>UMG</span><span>.NET</span><span>Firebase</span><span>VR</span></div>
 
     <h2>Role Overview</h2>
 

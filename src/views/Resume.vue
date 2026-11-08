@@ -10,11 +10,6 @@
       <br />I enjoy working closely with design, audio and art teams, and occasionally taking the lead programmer seat on project mechanics and game jams.
       <br />
       <br />Besides development and video games, I'm passionate about modding, Lego and buildable sets, and physical activities like weight lifting, walking and basketball.
-
-      <div style="margin-top:20px; margin-bottom:20px;">
-        <a class="download-link" href="/d/Joel_Abraham-Unity-Resume.pdf" target="_blank"><i class="fa fa-download fa-lg fa-fw"></i> Download as PDF</a>
-        <div style="clear:both"></div>
-      </div>
     </div>
     <div class="photo">
       <img src="/img/avatar.png" alt="Photo of Joel" />
@@ -34,16 +29,20 @@
       <div style="margin-top: 10px;">
         Selected work:
         <ul>
-          <li><strong><a href="https://store.steampowered.com/app/3553150/The_Cascadier/" target="_blank">Cascadier</a></strong> (Enchanted Arcade, Steam) — Roguelike coin pusher. Re-architected ability/trinket systems using ScriptableObjects and a multi-pathway tier structure, designed the core "First Coin" progression mechanic, and led physics & performance work that took the in-editor framerate from ~15 to a stable 60.</li>
-          <li><strong>Bad Company: Can't Get Enough</strong> (Reactional Games, App Store) — Match-3 mobile game. Led two major gameplay reworks, built mission/achievement systems, difficulty scaling and JSON save/load, and integrated Firebase, AppsFlyer and IronSource for monetization & analytics.</li>
+          <li><strong><a href="https://store.steampowered.com/app/3553150/The_Cascadier/" target="_blank">Cascadier</a></strong> (Enchanted Arcade, Steam &amp; Steam Deck) — Roguelike coin pusher. Joined four months before launch: re-architected the ability/trinket systems with ScriptableObjects, designed the core "First Coin" progression mechanic, and led physics &amp; performance work that took the in-editor framerate from ~15 to a stable 60. Returned for Early Access to build Perf Lab, an automated performance test that runs on PCs and the Steam Deck, upgrade to Unity 6.3 with HDRP, and add full controller and Steam Deck support, a rebuilt options menu with rebinding and accessibility settings, and a reworked shop and save flow.</li>
+          <li><strong>Bad Company: Can't Get Enough</strong> (Reactional Games, App Store &amp; Google Play) — Match-3 mobile game. Led two major gameplay reworks aimed at retention, built the live feature layer (missions, achievements, difficulty scaling, in-game economy, Firebase Remote Config) and JSON save/load, and integrated Firebase, AppsFlyer and IronSource for monetization &amp; analytics.</li>
           <li><strong>Reactional SDK & Demos</strong> — Embedded with the Reactional Games team for ~2 years across 10+ projects: built the Reactional Unity Plugin startup wizard with UI Toolkit, ported the B2C storefront and DiscoBooth demos from Unity to UE5 (UMG) with a custom .NET payment-simulation server, and built automotive HMI driving prototypes in both UE5 and Unity — the Unity build featured at the Shanghai Auto Show 2025 as part of Unity China's in-vehicle HMI showcase.</li>
+          <li><strong>Unreal Engine 5 prototype</strong> — 2.5D action side-scroller: enemies with wind-up and cooldown attack patterns, a state-based boss fight, dash-behind combat, animation blueprints, Niagara effects and a short level sequence.</li>
           <li><strong>Reusable gameplay systems</strong> — Modular AI (behaviors, cone-of-vision detection, cover-to-cover logic), player controllers with movement/combat/animation sync, and editor tooling.</li>
         </ul>
       </div>
 
-      <div class="tech-stack">Unity, Unreal Engine 5, C#, C++, Blueprints, UI Toolkit, UMG, DOTween, Firebase, AppsFlyer, IronSource, Git, Perforce</div>
+      <div class="tech-stack">Unity (HDRP), Unreal Engine 5, C#, C++, Blueprints, UI Toolkit, UMG, ImGui, DOTween, FMOD, Firebase, AppsFlyer, IronSource, Git, Perforce</div>
 
-      <h2>Game jams</h2>
+      <h2>Personal projects &amp; game jams</h2>
+
+      <h3><a href="https://github.com/JoelAbe/RoboDrive" target="_blank">RoboDrive</a> · Unreal Engine 5, C++</h3>
+      <div>Solo robotics simulation: differential-drive vehicle physics, sensor models with configurable noise, a documented TCP/JSON API and a ROS 2 bridge. Over 100 unit tests, a scenario regression suite in CI, and a measured investigation of how fog defeats lidar obstacle avoidance, then the fix. <a href="/#/projects/robodrive">Read the write-up</a>.</div>
 
       <h3><a href="https://veeyuh.itch.io/clocktergeist" target="_blank">Clocktergeist</a> · Unreal Engine 5</h3>
       <div>Lead programmer on a month-long boss-rush jam. Built three multi-phase boss fights across three levels using State Trees.</div>
@@ -70,9 +69,11 @@
         <h3>Gamedev</h3>
         <div>Unity</div>
         <div>Unreal Engine 5</div>
+        <div>HDRP</div>
         <div>UI Toolkit</div>
         <div>Unreal UMG</div>
         <div>DOTween</div>
+        <div>FMOD</div>
       </div>
 
       <div class="skill-set">
@@ -83,6 +84,8 @@
         <div>Editor tooling</div>
         <div>UI Development</div>
         <div>Performance optimization</div>
+        <div>Automated performance testing</div>
+        <div>Controller &amp; platform support</div>
         <div>Real-time physics &amp; simulation</div>
         <div>Middleware / SDK integration</div>
       </div>
@@ -92,6 +95,8 @@
         <div>Git</div>
         <div>Perforce</div>
         <div>Plastic SCM</div>
+        <div>CI (GitHub Actions)</div>
+        <div>ROS 2</div>
         <div>Firebase</div>
         <div>AppsFlyer / IronSource</div>
         <div>REST APIs / JSON</div>
@@ -149,10 +154,6 @@ h4 {
   max-width: 700px;
 }
 
-.download-link {
-  float:left;
-  margin-right: 50px;
-}
 
 .full-content div {
   max-width: 800px;

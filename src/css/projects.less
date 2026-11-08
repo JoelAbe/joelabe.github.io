@@ -53,6 +53,46 @@
         color: inherit;
     }
 
+    // Tech tags under the metadata line, styled like the badges on the project tiles
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: -8px 0 20px 0;
+    }
+
+    .tags span {
+        padding: 4px 9px;
+        border-radius: 4px;
+        background-color: rgba(20, 20, 20, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #e6e6e6;
+        font-size: 0.75em;
+        line-height: 1.4em;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+    }
+
+    // Collapsible code samples, so deep dives stay one click away instead of in the way
+    details {
+        margin: 10px 0 6px 0;
+    }
+
+    summary {
+        cursor: pointer;
+        color: #8fb8ff;
+        font-size: 0.95em;
+        width: fit-content;
+    }
+
+    summary:hover {
+        opacity: 0.75;
+    }
+
+    details > pre {
+        margin-top: 10px;
+    }
+
     @media only screen and (min-width: 620px){
         iframe.youtube {
             max-width: 728px;

@@ -84,6 +84,8 @@ export default [
         <strong>Engine:</strong> Unreal Engine 5 &nbsp;·&nbsp; <strong>Type:</strong> Game Jam &nbsp;·&nbsp; <strong>Platform:</strong> PC
     </div>
 
+    <div class="tags"><span>C++</span><span>Blueprints</span></div>
+
     <h2>Context</h2>
 
     <div class="paragraph">
